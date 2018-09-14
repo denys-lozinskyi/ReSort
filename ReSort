@@ -4,29 +4,27 @@
 # ------------------------------------------------------------------------------
 
 from shutil import copy2, move
-import sys, os, re, zipfile
+import os, re, zipfile
 from xml.etree.ElementTree import XML
-
-#ниже - глобальные переменные для работы функции get_docx-text, поскольку файлы docx заключают в себя namespaces
-WORD_NAMESPACE = '{http://schemas.openxmlformats.org/wordprocessingml/2006/main}'
-PARA = WORD_NAMESPACE + 'p'
-TEXT = WORD_NAMESPACE + 't'
-
 
 def get_docx_text(path):
     """Модуль извлекает текст из MS XML Word document (.docx) и превращает его строку в формате Unicode.
        Разработчик ядра модуля: Etienne, http://etienned.github.io/posts/extract-text-from-word-docx-simply/
        Адаптировано для парсинга по docx и ReSort: Денис Лозинский
     """
-    
+    #ниже - переменные, необходимые для docx парсинга, поскольку файлы docx представляют из себя заархивированные namespaced XML
+    word_namespace = '{http://schemas.openxmlformats.org/wordprocessingml/2006/main}'
+    para = word_namespace + 'p'
+    text = word_namespace + 't'
+
     document = zipfile.ZipFile(path)
     xml_content = document.read('word/document.xml')
     document.close()
     tree = XML(xml_content)    
 
     paragraphs = []
-    for paragraph in tree.iter(PARA):
-        texts = [node.text for node in paragraph.iter(TEXT) if node.text]        
+    for paragraph in tree.iter(para):
+        texts = [node.text for node in paragraph.iter(text) if node.text]        
         if texts:
             paragraphs.append(''.join(texts))
     joint_text = ' '.join(paragraphs)
@@ -121,14 +119,10 @@ def if_dublicate_title(file_name, n, path2dest_folder):
     return file_name
 
 
-
 ########################
 #       MAIN BODY      #
 ########################
 
-
-#определяем локальную кодировку для гарантированно корректной работы функции open()
-#localcoding = sys.getfilesystemencoding()
 
 #задаем пути к папкам (в финальной версии пути будут задаваться пользователем)
 path2source_folder = "g:\Python\\file_parsing\source_folder\\"
