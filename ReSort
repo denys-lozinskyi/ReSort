@@ -148,8 +148,12 @@ for document in files_to_scan:
         #print(file)
         if is_dpk(file):
             print(document) #для тестирования
-            move(path2source_folder + document, 'ДПК') #перемещение файла в папку
-            os.rename(path2dest_folder + document, path2dest_folder + title_maker(file, path2dest_folder)) #переименование файла
+            move(path2source_folder + document, path2dest_folder + title_maker(file, path2dest_folder) #перемещение файла в папку с переименованием
+            '''перемеименование лучше совместить с перемещением (благо, shutil.move это позволяет, т.к. сам использует os.rename)
+               поскольку если перед перещением в папке назначения уже будет присутствовать файл с таким же именем,
+               move сгенерирует ошибку. Обезопаситься от ошибки можно только перемещением файла с уникальным именем.
+               Эту уникальность обеспечит title_maker, работающий совместно с if_dublicate_title
+            '''
         #else:
             #print(document + ' - не ДПК')
            
