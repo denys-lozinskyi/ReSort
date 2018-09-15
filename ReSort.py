@@ -99,7 +99,10 @@ def title_maker(file, path2dest_folder):
         #print(title)
         #print(os.listdir(path2dest_folder))
     except:
-        title = default_name #если по какой-то причине имя и фамилию определить не удалось, установить имя по умолчанию. Потом проверить, есть ли файл с таким именем в папке
+        '''если имя и фамилию определить не удалось (слова-маркеры для индексации фамилии и имени отсутствуют
+           или написаны с ошибками), установить имя по умолчанию. Потом проверить, есть ли файл с таким именем в папке
+        '''
+        title = default_name
     if title in os.listdir(path2dest_folder):
         return if_dublicate_title(title, path2dest_folder)
     else:
