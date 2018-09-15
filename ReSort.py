@@ -3,8 +3,8 @@
 # Author:      Denys Lozinskyi
 # ------------------------------------------------------------------------------
 
-from shutil import copy2, move
 import os, re, zipfile
+from shutil import move
 from xml.etree.ElementTree import XML
 
 def get_docx_text(path):
