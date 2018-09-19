@@ -97,8 +97,7 @@ def title_maker(file):
             if file_content[i+4] == 'κόσμον':
                 surname = str(file_content[i+6])
             else:
-                surname = str(file_content[i+3])
-        
+                surname = str(file_content[i+3])        
     try:                    
         title = name.capitalize() + ' ' + surname.capitalize() + ', о каноничности.docx'
         #print(title)
@@ -130,12 +129,11 @@ def if_dublicate_title(file_name):
     return file_name
 
 
-
 def ReSort():
     
     files_to_scan = os.listdir(PATH2SOURCE_FOLDER)
 
-    print('Файлы ДПК:') #вводная фраза для вывода перечня файлов ниже
+    print('Файлы ДПК:') #вводная фраза, пока что в консоль, потом переназначить в Label
 
     #сканируем каждый файл из списка
     for document in files_to_scan:
@@ -153,7 +151,6 @@ def ReSort():
                move сгенерирует ошибку. Обезопаситься от ошибки можно только перемещением файла с уникальным именем.
                Эту уникальность обеспечит title_maker, работающий совместно с if_dublicate_title
             '''
-            
             #else:
                 #print(document + ' - не ДПК')
 
