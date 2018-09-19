@@ -15,7 +15,7 @@ def dest_folder():
 
 window=Tk()
 window.geometry("1000x600")
-window.title("ДПК сортировщик")
+window.title("ReSort")
 
 button_source=Button(window,text="Выберите папку для анализа", padx="20", pady="20", command=source_folder)
 button_source.place(x=40, y=50)
