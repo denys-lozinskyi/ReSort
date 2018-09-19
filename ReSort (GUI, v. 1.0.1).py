@@ -110,6 +110,7 @@ def title_maker(file):
     if title in os.listdir(PATH2DEST_FOLDER):
         return if_dublicate_title(title)
     else:
+        display2.insert(END, title + "\n")
         return title
 
         
@@ -126,6 +127,7 @@ def if_dublicate_title(file_name):
     while file_name in os.listdir(PATH2DEST_FOLDER): #до тех пор, пока файл с таким именем присутствует в папке
         title_constructor[2] += 1 #увеличиваем нумератор на единицу
         file_name = ('%s' + '(%s).' + '%s') %(title_constructor[0], title_constructor[2], title_constructor[1]) #собираем новое имя файла и снова отдаем его на проверку
+    display2.insert(END, file_name + "\n")
     return file_name
 
 
@@ -144,8 +146,7 @@ def ReSort():
             #print(file)
             if is_dpk(file):
                 display1.insert(END, document + "\n") #для тестирования
-                move(PATH2SOURCE_FOLDER + document, PATH2DEST_FOLDER + title_maker(file)) #перемещение файла в папку с переименованием
-                display2.insert(END, title_maker(file) + "\n")
+                move(PATH2SOURCE_FOLDER + document, PATH2DEST_FOLDER + title_maker(file)) #перемещение файла в папку с переименованием                
             '''перемеименование лучше совместить с перемещением (благо, shutil.move это позволяет, т.к. сам использует os.rename)
                поскольку если перед перещением в папке назначения уже будет присутствовать файл с таким же именем,
                move сгенерирует ошибку. Обезопаситься от ошибки можно только перемещением файла с уникальным именем.
@@ -156,11 +157,11 @@ def ReSort():
 
 def source_folder():
     global PATH2SOURCE_FOLDER
-    PATH2SOURCE_FOLDER = (filedialog.askdirectory(initialdir = "/", title = "Выберите папку с файлами") + "/")  
+    PATH2SOURCE_FOLDER = (filedialog.askdirectory(initialdir = "\\", title = "Выберите папку с файлами") + "\\")  
 
 def dest_folder():
     global PATH2DEST_FOLDER
-    PATH2DEST_FOLDER = (filedialog.askdirectory(initialdir = "/", title = "Выберите папку с файлами") + "/")
+    PATH2DEST_FOLDER = (filedialog.askdirectory(initialdir = "\\", title = "Выберите папку с файлами") + "\\")
 
 window = Tk()
 window.title("ReSort")
@@ -193,4 +194,3 @@ button_jumptodest.place(x=1010, y=620)
 
 
 window.mainloop()
-
