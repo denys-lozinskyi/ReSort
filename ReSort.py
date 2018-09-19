@@ -95,7 +95,7 @@ def title_maker(file, path2dest_folder):
                 surname = str(file_content[i+3])
         
     try:                    
-        title = (name[0].upper() + name[1:]) + ' ' + (surname[0].upper() + surname[1:]) + ', о каноничности.docx'
+        title = name.capitalize() + ' ' + surname.capitalize() + ', о каноничности.docx'
         #print(title)
         #print(os.listdir(path2dest_folder))
     except:
