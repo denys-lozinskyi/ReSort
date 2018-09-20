@@ -33,8 +33,13 @@ button_source.place(x=40, y=50)
 button_dest = Button(window,text="Выберите папку назначения", padx="20", pady="20", command=dest_folder)
 button_dest.place(x=40, y=130)
 
+move_but = Radiobutton(window, text="Переместить", bg="#f9f9f6")
+copy_but = Radiobutton(window, text="Только копировать", bg="#f9f9f6")
+move_but.place(x=50, y=210)
+copy_but.place(x=50, y=240)
+
 button_start = Button(window, text="Начать", padx="20", pady="20", command=ReSort)
-button_start.place(x=95, y=230)
+button_start.place(x=95, y=290)
 
 button_jumptosource = Button(window,text="Перейти", padx="20", pady="10")
 button_jumptosource.place(x=460, y=620)
