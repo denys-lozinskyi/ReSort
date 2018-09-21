@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # Name:        ReSort
 # Author:      Denys Lozinskyi
-# Version:     v. 1.0.1 (GUI)
+# Version:     build 1.0.2 (GUI)
 # ------------------------------------------------------------------------------
 
 import os, re, zipfile
@@ -110,7 +110,7 @@ def title_maker(file):
     if title in os.listdir(PATH2DEST_FOLDER):
         return if_dublicate_title(title)
     else:
-        display2.insert(END, title + "\n")
+        display2.insert(END, title)
         return title
 
         
@@ -127,7 +127,7 @@ def if_dublicate_title(file_name):
     while file_name in os.listdir(PATH2DEST_FOLDER): #до тех пор, пока файл с таким именем присутствует в папке
         title_constructor[2] += 1 #увеличиваем нумератор на единицу
         file_name = ('%s' + '(%s).' + '%s') %(title_constructor[0], title_constructor[2], title_constructor[1]) #собираем новое имя файла и снова отдаем его на проверку
-    display2.insert(END, file_name + "\n")
+    display2.insert(END, file_name)
     return file_name
 
 
@@ -163,34 +163,55 @@ def dest_folder():
     global PATH2DEST_FOLDER
     PATH2DEST_FOLDER = (filedialog.askdirectory(initialdir = "\\", title = "Выберите папку с файлами") + "\\")
 
+def BothScroll(*args):
+    #обеспечивает одновременный скроллинг листбоксов одним скроллером
+    display1.yview(*args)
+    display2.yview(*args)
+    
+    
+
 window = Tk()
-window.title("ReSort")
+general_bg ="#BDBDBD" #цвет общего фона
+displays_bg = "#F5F6CE" #цвет фона дисплеев
+window.title("ReSort build 1.0.2 alpha")
 window.geometry("1000x600")
-window.configure(bg="#f9f9f6")
+window.configure(bg=general_bg)
 
-display1 = Text(window, width=60, height=30, spacing3 = 2, font=("Timesnewroman", 10))
-display1.place(x=300, y=50)
 
-display2 = Text(window, width=60, height=30, spacing3 = 2, font=("Timesnewroman", 10))
-display2.place(x=850, y=50)
+logo = Label(window, text="ReSort", bg=general_bg, font=("Brush Script MT", 32))
+logo.place(x=40, y=5)
 
-arrow = Label(window, text="⇒", bg="#f9f9f6", font=("Times New Roman", 32))
-arrow.place(x=760, y=300)
+scrollbar = Scrollbar(window, orient="vertical", command=BothScroll)
+scrollbar.pack(side=RIGHT, fill=Y)
+
+display1 = Listbox(window, width=55, height=25, bd=2, bg=displays_bg, font=("Times New Roman", 12), yscrollcommand=scrollbar.set)
+display1.place(x=300, y=80)
+
+display2 = Listbox(window, width=55, height=25, bd=2, bg=displays_bg, font=("Times New Roman", 12), yscrollcommand=scrollbar.set)
+display2.place(x=850, y=80)
+
+arrow = Label(window, text="⇒", bg=general_bg, font=("Times New Roman", 32))
+arrow.place(x=775, y=310)
 
 button_source = Button(window,text="Выберите папку для анализа", padx="20", pady="20", command=source_folder)
-button_source.place(x=40, y=50)
+button_source.place(x=40, y=80)
 
 button_dest = Button(window,text="Выберите папку назначения", padx="20", pady="20", command=dest_folder)
-button_dest.place(x=40, y=130)
+button_dest.place(x=40, y=160)
+
+move_but = Radiobutton(window, text="Переместить", bg=general_bg)
+copy_but = Radiobutton(window, text="Только копировать", bg=general_bg)
+move_but.place(x=50, y=240)
+copy_but.place(x=50, y=270)
 
 button_start = Button(window, text="Начать", padx="20", pady="20", command=ReSort)
-button_start.place(x=95, y=230)
+button_start.place(x=95, y=320)
 
 button_jumptosource = Button(window,text="Перейти", padx="20", pady="10")
-button_jumptosource.place(x=460, y=620)
+button_jumptosource.place(x=470, y=600)
 
 button_jumptodest = Button(window,text="Перейти", padx="20", pady="10")
-button_jumptodest.place(x=1010, y=620)
+button_jumptodest.place(x=1025, y=600)
 
 
 window.mainloop()
