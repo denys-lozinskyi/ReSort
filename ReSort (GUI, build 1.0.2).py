@@ -111,6 +111,7 @@ def title_maker(file):
         return if_dublicate_title(title)
     else:
         display2.insert(END, title)
+        window.update_idletasks()
         return title
 
         
@@ -128,6 +129,7 @@ def if_dublicate_title(file_name):
         title_constructor[2] += 1 #увеличиваем нумератор на единицу
         file_name = ('%s' + '(%s).' + '%s') %(title_constructor[0], title_constructor[2], title_constructor[1]) #собираем новое имя файла и снова отдаем его на проверку
     display2.insert(END, file_name)
+    window.update_idletasks()
     return file_name
 
 
@@ -145,7 +147,8 @@ def ReSort():
             file = file.lower()    
             #print(file)
             if is_dpk(file):
-                display1.insert(END, document + "\n") #для тестирования
+                display1.insert(END, document)
+                window.update_idletasks() #необходим, чтобы строки выводились по мере выполнения программы, а не все сразу в конце
                 move(PATH2SOURCE_FOLDER + document, PATH2DEST_FOLDER + title_maker(file)) #перемещение файла в папку с переименованием                
             '''перемеименование лучше совместить с перемещением (благо, shutil.move это позволяет, т.к. сам использует os.rename)
                поскольку если перед перещением в папке назначения уже будет присутствовать файл с таким же именем,
