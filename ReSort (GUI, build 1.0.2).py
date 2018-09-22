@@ -144,13 +144,13 @@ def ReSort():
     #сканируем каждый файл из списка
     dpk_count = 0
     for document in files_to_scan:
-        if document[-5:] == ".docx":
-            dpk_count += 1
+        if document[-5:] == ".docx":            
             #print(document)
             file = get_docx_text(PATH2SOURCE_FOLDER + document)
             file = file.lower()    
             #print(file)
             if is_dpk(file):
+                dpk_count += 1
                 display1.insert(END, document)
                 display1.yview(END) #следить за скроллом, при необходимости - удалить
                 window.update_idletasks() #необходим, чтобы строки выводились по мере выполнения программы, а не все сразу в конце
