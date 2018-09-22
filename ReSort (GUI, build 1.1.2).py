@@ -136,13 +136,20 @@ def if_dublicate_title(file_name):
 
 
 def ReSort():
-    
-    files_to_scan = os.listdir(PATH2SOURCE_FOLDER)
+    """на этом месте сделать полноценную проверку путей. Исключение ниже обрабатывает только наличие пути к исходной папке
+       но нужно проверить и папку назначения, чтобы не скопировало файлы куда попало
+    """   
+    try:
+        files_to_scan = os.listdir(PATH2SOURCE_FOLDER)
+    except:
+        status.config(text="Сначала выберите папку для анализа")
+        return
 
     #print('Файлы ДПК:') #вводная фраза, пока что в консоль, потом переназначить в Label
 
     #сканируем каждый файл из списка
     dpk_count = 0
+    status.config(text=("Обработка..."))
     for document in files_to_scan:
         if document[-5:] == ".docx":            
             #print(document)
@@ -163,17 +170,32 @@ def ReSort():
             #else:
                 #print(document + ' - не ДПК')
     if dpk_count == 0:
-        print("В выбранной папке ДПК отсутствуют") #потом выводить на экран в статус-Label
+        status.config(text="В выбранной папке файлы ДПК отсутствуют")
     else:
-        print("Было обнаружено ", dpk_count, "ДПК") #потом выводить на экран в статус-Label
+        status.config(text=("Было обнаружено и перенесено " + str(dpk_count) + " ДПК"))
 
 def source_folder():
     global PATH2SOURCE_FOLDER
-    PATH2SOURCE_FOLDER = (filedialog.askdirectory(initialdir = "\\", title = "Выберите папку с файлами") + "\\")  
+    PATH2SOURCE_FOLDER = (filedialog.askdirectory(title = "Выберите папку с файлами") + "/")
+    status.config(text=("Папка для анализа:    " + PATH2SOURCE_FOLDER))
 
 def dest_folder():
     global PATH2DEST_FOLDER
-    PATH2DEST_FOLDER = (filedialog.askdirectory(initialdir = "\\", title = "Выберите папку с файлами") + "\\")
+    PATH2DEST_FOLDER = (filedialog.askdirectory(title = "Выберите папку с файлами") + "/")
+    status.config(text=("Папка для перемещения/копирования:    " + PATH2DEST_FOLDER))
+
+def jumptosource():
+    try:
+        os.startfile(PATH2SOURCE_FOLDER)
+    except:
+        status.config(text="Вы не выбрали папку для анализа")
+        
+
+def jumptodest():                      
+    try:
+        os.startfile(PATH2DEST_FOLDER)
+    except:
+        status.config(text="Вы не выбрали папку назначения")
 
 def BothScroll(*args):
     #обеспечивает одновременный скроллинг листбоксов одним скроллером
@@ -219,11 +241,13 @@ copy_but.place(x=50, y=270)
 button_start = Button(window, text="Начать", padx="20", pady="20", command=ReSort)
 button_start.place(x=95, y=320)
 
-button_jumptosource = Button(window,text="Перейти", padx="20", pady="10")
+button_jumptosource = Button(window,text="Перейти", padx="20", pady="10", command=jumptosource)
 button_jumptosource.place(x=470, y=600)
 
-button_jumptodest = Button(window,text="Перейти", padx="20", pady="10")
+button_jumptodest = Button(window,text="Перейти", padx="20", pady="10", command=jumptodest)
 button_jumptodest.place(x=1025, y=600)
 
+status = Label(window, text="Добро пожаловать в ReSort! Где будем искать файлы?", bd=1, relief=SUNKEN, anchor=W)
+status.pack(side=BOTTOM, fill=X)
 
 window.mainloop()
