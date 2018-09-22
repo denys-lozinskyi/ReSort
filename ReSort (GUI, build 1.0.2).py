@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # Name:        ReSort
 # Author:      Denys Lozinskyi
-# Version:     build 1.0.2 (GUI)
+# Version:     v. 1.0.2 (GUI)
 # ------------------------------------------------------------------------------
 
 import os, re, zipfile
@@ -111,6 +111,7 @@ def title_maker(file):
         return if_dublicate_title(title)
     else:
         display2.insert(END, title)
+        display2.yview(END) #следить за скроллом, при необходимости - удалить
         window.update_idletasks()
         return title
 
@@ -129,6 +130,7 @@ def if_dublicate_title(file_name):
         title_constructor[2] += 1 #увеличиваем нумератор на единицу
         file_name = ('%s' + '(%s).' + '%s') %(title_constructor[0], title_constructor[2], title_constructor[1]) #собираем новое имя файла и снова отдаем его на проверку
     display2.insert(END, file_name)
+    display2.yview(END) #следить за скроллом, при необходимости - удалить
     window.update_idletasks()
     return file_name
 
@@ -137,17 +139,20 @@ def ReSort():
     
     files_to_scan = os.listdir(PATH2SOURCE_FOLDER)
 
-    print('Файлы ДПК:') #вводная фраза, пока что в консоль, потом переназначить в Label
+    #print('Файлы ДПК:') #вводная фраза, пока что в консоль, потом переназначить в Label
 
     #сканируем каждый файл из списка
+    dpk_count = 0
     for document in files_to_scan:
         if document[-5:] == ".docx":
+            dpk_count += 1
             #print(document)
             file = get_docx_text(PATH2SOURCE_FOLDER + document)
             file = file.lower()    
             #print(file)
             if is_dpk(file):
                 display1.insert(END, document)
+                display1.yview(END) #следить за скроллом, при необходимости - удалить
                 window.update_idletasks() #необходим, чтобы строки выводились по мере выполнения программы, а не все сразу в конце
                 move(PATH2SOURCE_FOLDER + document, PATH2DEST_FOLDER + title_maker(file)) #перемещение файла в папку с переименованием                
             '''перемеименование лучше совместить с перемещением (благо, shutil.move это позволяет, т.к. сам использует os.rename)
@@ -157,6 +162,10 @@ def ReSort():
             '''
             #else:
                 #print(document + ' - не ДПК')
+    if dpk_count == 0:
+        print("В выбранной папке ДПК отсутствуют") #потом выводить на экран в статус-Label
+    else:
+        print("Было обнаружено ", dpk_count, "ДПК") #потом выводить на экран в статус-Label
 
 def source_folder():
     global PATH2SOURCE_FOLDER
