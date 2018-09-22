@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # Name:        ReSort
 # Author:      Denys Lozinskyi
-# Version:     v.1 (Console)
+# Version:     v.1.0 (Console)
 # ------------------------------------------------------------------------------
 
 import os, re, zipfile
@@ -138,16 +138,17 @@ def if_dublicate_title(file_name):
 #создаем список файлов в выбранной директории (может задаваться пользователем вручную)
 files_to_scan = os.listdir(PATH2SOURCE_FOLDER)
 
-print('Файлы ДПК:') #вводная фраза для вывода перечня файлов ниже
-
+#print('Файлы ДПК:') #вводная фраза для вывода перечня файлов ниже
 #сканируем каждый файл из списка
+dpk_count = 0
 for document in files_to_scan:
-    if document[-5:] == ".docx":
+    if document[-5:] == ".docx":        
         #print(document)
         file = get_docx_text(PATH2SOURCE_FOLDER + document)
         file = file.lower()    
         #print(file)
         if is_dpk(file):
+            dpk_count += 1
             print(document) #для тестирования
             move(PATH2SOURCE_FOLDER + document, PATH2DEST_FOLDER + title_maker(file)) #перемещение файла в папку с переименованием
             '''перемеименование лучше совместить с перемещением (благо, shutil.move это позволяет, т.к. сам использует os.rename)
@@ -157,5 +158,8 @@ for document in files_to_scan:
             '''
         #else:
             #print(document + ' - не ДПК')
-           
+if dpk_count == 0:
+    print("В выбранной папке ДПК отсутствуют")
+else:
+    print("Было обнаружено ", dpk_count, "ДПК")        
            
