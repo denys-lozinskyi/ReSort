@@ -1,14 +1,14 @@
 #-------------------------------------------------------------------------------
 # Name:        ReSort
 # Author:      Denys Lozinskyi
-# Version:     v. 1.1.2 (GUI)
+# Version:     v. 1.2.2 (GUI)
 # ------------------------------------------------------------------------------
 
 import os, re, zipfile
 from shutil import move
 from xml.etree.ElementTree import XML
 from tkinter import *
-from tkinter import filedialog
+from tkinter import filedialog, ttk
 
 
 def get_docx_text(path):
@@ -135,21 +135,21 @@ def if_dublicate_title(file_name):
     return file_name
 
 
-def ReSort():
-    """на этом месте сделать полноценную проверку путей. Исключение ниже обрабатывает только наличие пути к исходной папке
-       но нужно проверить и папку назначения, чтобы не скопировало файлы куда попало
-    """   
+def ReSort():  
     try:
         files_to_scan = os.listdir(PATH2SOURCE_FOLDER)
     except:
-        status.config(text="Сначала выберите папку для анализа")
+        status.config(text="***** Сначала выберите папку для анализа")
         return
-
-    #print('Файлы ДПК:') #вводная фраза, пока что в консоль, потом переназначить в Label
-
+    try:
+        PATH2DEST_FOLDER == True
+    except:
+        status.config(text="***** Выберите папку для перемещения/копирования")
+        return
+    
     #сканируем каждый файл из списка
     dpk_count = 0
-    status.config(text=("Обработка..."))
+    status.config(text=("***** Обработка..."))
     for document in files_to_scan:
         if document[-5:] == ".docx":            
             #print(document)
@@ -170,9 +170,9 @@ def ReSort():
             #else:
                 #print(document + ' - не ДПК')
     if dpk_count == 0:
-        status.config(text="В выбранной папке файлы ДПК отсутствуют")
+        status.config(text="***** В выбранной папке файлы ДПК отсутствуют")
     else:
-        status.config(text=("Было обнаружено и перенесено " + str(dpk_count) + " ДПК"))
+        status.config(text=("***** Процесс завершен. Было обнаружено и перенесено " + str(dpk_count) + " ДПК"))
 
 def source_folder():
     global PATH2SOURCE_FOLDER
@@ -180,7 +180,7 @@ def source_folder():
     if PATH2SOURCE_FOLDER == "/":
         return
     else:
-        status.config(text=("Папка для анализа:    " + PATH2SOURCE_FOLDER))
+        status.config(text=("***** Папка для анализа:    " + PATH2SOURCE_FOLDER))
 
 def dest_folder():
     global PATH2DEST_FOLDER
@@ -188,20 +188,20 @@ def dest_folder():
     if PATH2DEST_FOLDER == "/":
         return
     else:
-        status.config(text=("Папка для перемещения/копирования:    " + PATH2DEST_FOLDER))
+        status.config(text=("***** Папка для перемещения/копирования:    " + PATH2DEST_FOLDER))
 
 def jumptosource():
     try:
         os.startfile(PATH2SOURCE_FOLDER)
     except:
-        status.config(text="Вы не выбрали папку для анализа")
+        status.config(text="***** Вы не выбрали папку для анализа")
         
 
 def jumptodest():                      
     try:
         os.startfile(PATH2DEST_FOLDER)
     except:
-        status.config(text="Вы не выбрали папку назначения")
+        status.config(text="***** Вы не выбрали папку назначения")
 
 def BothScroll(*args):
     #обеспечивает одновременный скроллинг листбоксов одним скроллером
@@ -213,47 +213,52 @@ def BothScroll(*args):
 window = Tk()
 general_bg ="#BDBDBD" #цвет общего фона
 displays_bg = "#F5F6CE" #цвет фона дисплеев
-window.title("ReSort build 1.1.2 alpha")
+window.title("ReSort build 1.2.2 alpha")
 window.geometry("1000x600")
 window.configure(bg=general_bg)
 
 
 logo = Label(window, text="ReSort", bg=general_bg, font=("Brush Script MT", 32))
 logo.place(x=40, y=5)
+info = Label(window, text="Reference Sorting Tool", bg=general_bg, font=("Times New Roman", 8, "italic"))
+info.place(x=80, y=50)
 
 scrollbar = Scrollbar(window, orient="vertical", command=BothScroll)
 scrollbar.pack(side=RIGHT, fill=Y)
 
 display1 = Listbox(window, width=55, height=25, bd=2, bg=displays_bg, font=("Times New Roman", 12), yscrollcommand=scrollbar.set)
-display1.place(x=300, y=80)
+display1.place(x=300, y=85)
 
 display2 = Listbox(window, width=55, height=25, bd=2, bg=displays_bg, font=("Times New Roman", 12), yscrollcommand=scrollbar.set)
-display2.place(x=850, y=80)
+display2.place(x=850, y=85)
 
 arrow = Label(window, text="⇒", bg=general_bg, font=("Times New Roman", 32))
-arrow.place(x=775, y=310)
+arrow.place(x=775, y=325)
 
-button_source = Button(window,text="Выберите папку для анализа", padx="20", pady="20", command=source_folder)
-button_source.place(x=40, y=80)
+button_source = Button(window,text="Выберите папку для анализа", padx="15", pady="20", command=source_folder)
+button_source.place(x=40, y=85)
 
-button_dest = Button(window,text="Выберите папку назначения", padx="20", pady="20", command=dest_folder)
-button_dest.place(x=40, y=160)
+button_dest = Button(window,text="Выберите папку назначения", padx="16", pady="20", command=dest_folder)
+button_dest.place(x=40, y=165)
 
 move_but = Radiobutton(window, text="Переместить", bg=general_bg)
 copy_but = Radiobutton(window, text="Только копировать", bg=general_bg)
-move_but.place(x=50, y=240)
-copy_but.place(x=50, y=270)
+move_but.place(x=50, y=245)
+copy_but.place(x=50, y=275)
 
 button_start = Button(window, text="Начать", padx="20", pady="20", command=ReSort)
-button_start.place(x=95, y=320)
+button_start.place(x=95, y=325)
 
-button_jumptosource = Button(window,text="Перейти", padx="20", pady="10", command=jumptosource)
-button_jumptosource.place(x=470, y=600)
+button_jumptosource = Button(window,text="Перейти", padx="50", pady="10", command=jumptosource)
+button_jumptosource.place(x=445, y=605)
 
-button_jumptodest = Button(window,text="Перейти", padx="20", pady="10", command=jumptodest)
-button_jumptodest.place(x=1025, y=600)
+button_jumptodest = Button(window,text="Перейти", padx="50", pady="10", command=jumptodest)
+button_jumptodest.place(x=1000, y=605)
 
-status = Label(window, text="Добро пожаловать в ReSort! Где будем искать файлы?", bd=1, relief=SUNKEN, anchor=W)
+status = Label(window, text="***** Добро пожаловать в ReSort! Где будем искать файлы?", bd=5, bg="#E6E6E6", anchor=W)
 status.pack(side=BOTTOM, fill=X)
+
+#progress = ttk.Progressbar(status, orient="horizontal", length=191, mode="determinate")
+#progress.pack(side=BOTTOM, anchor=E)
 
 window.mainloop()
