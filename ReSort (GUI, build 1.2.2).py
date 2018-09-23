@@ -146,7 +146,8 @@ def ReSort():
     except:
         status.config(text="***** Выберите папку для перемещения/копирования")
         return
-    
+    display1.delete(0, END) #очищаем дисплеи
+    display2.delete(0, END)
     #сканируем каждый файл из списка
     dpk_count = 0
     status.config(text=("***** Обработка..."))
@@ -173,6 +174,7 @@ def ReSort():
         status.config(text="***** В выбранной папке файлы ДПК отсутствуют")
     else:
         status.config(text=("***** Процесс завершен. Было обнаружено и перенесено " + str(dpk_count) + " ДПК"))
+    return
 
 def source_folder():
     global PATH2SOURCE_FOLDER
@@ -262,3 +264,4 @@ status.pack(side=BOTTOM, fill=X)
 #progress.pack(side=BOTTOM, anchor=E)
 
 window.mainloop()
+
