@@ -177,12 +177,18 @@ def ReSort():
 def source_folder():
     global PATH2SOURCE_FOLDER
     PATH2SOURCE_FOLDER = (filedialog.askdirectory(title = "Выберите папку с файлами") + "/")
-    status.config(text=("Папка для анализа:    " + PATH2SOURCE_FOLDER))
+    if PATH2SOURCE_FOLDER == "/":
+        return
+    else:
+        status.config(text=("Папка для анализа:    " + PATH2SOURCE_FOLDER))
 
 def dest_folder():
     global PATH2DEST_FOLDER
     PATH2DEST_FOLDER = (filedialog.askdirectory(title = "Выберите папку с файлами") + "/")
-    status.config(text=("Папка для перемещения/копирования:    " + PATH2DEST_FOLDER))
+    if PATH2DEST_FOLDER == "/":
+        return
+    else:
+        status.config(text=("Папка для перемещения/копирования:    " + PATH2DEST_FOLDER))
 
 def jumptosource():
     try:
@@ -207,7 +213,7 @@ def BothScroll(*args):
 window = Tk()
 general_bg ="#BDBDBD" #цвет общего фона
 displays_bg = "#F5F6CE" #цвет фона дисплеев
-window.title("ReSort build 1.0.2 alpha")
+window.title("ReSort build 1.1.2 alpha")
 window.geometry("1000x600")
 window.configure(bg=general_bg)
 
