@@ -1,11 +1,11 @@
 #-------------------------------------------------------------------------------
 # Name:        ReSort
 # Author:      Denys Lozinskyi
-# Version:     v. 1.2.2 (GUI)
+# Version:     v. 2.0.2 (GUI)
 # ------------------------------------------------------------------------------
 
 import os, re, zipfile
-from shutil import move
+from shutil import move, copy2
 from xml.etree.ElementTree import XML
 from tkinter import *
 from tkinter import filedialog, ttk
@@ -141,11 +141,20 @@ def ReSort():
     except:
         status.config(text="***** Сначала выберите папку для анализа")
         return
+    else:
+        if PATH2SOURCE_FOLDER == "/":
+           status.config(text="***** Выберите папку для анализа")
+           return
     try:
         PATH2DEST_FOLDER == True
     except:
         status.config(text="***** Выберите папку для перемещения/копирования")
         return
+    else:
+        if PATH2DEST_FOLDER == "/":
+            status.config(text="***** Выберите папку для перемещения/копирования")
+            return
+    
     display1.delete(0, END) #очищаем дисплеи
     display2.delete(0, END)
     #сканируем каждый файл из списка
@@ -162,7 +171,10 @@ def ReSort():
                 display1.insert(END, document)
                 display1.yview(END) #следить за скроллом, при необходимости - удалить
                 window.update_idletasks() #необходим, чтобы строки выводились по мере выполнения программы, а не все сразу в конце
-                move(PATH2SOURCE_FOLDER + document, PATH2DEST_FOLDER + title_maker(file)) #перемещение файла в папку с переименованием                
+                if var.get() == 0:
+                    move(PATH2SOURCE_FOLDER + document, PATH2DEST_FOLDER + title_maker(file)) #перемещение файла в папку с переименованием
+                elif var.get() == 1:
+                    copy2(PATH2SOURCE_FOLDER + document, PATH2DEST_FOLDER + title_maker(file)) #копирование файла в папку с переименованием
             '''перемеименование лучше совместить с перемещением (благо, shutil.move это позволяет, т.к. сам использует os.rename)
                поскольку если перед перещением в папке назначения уже будет присутствовать файл с таким же именем,
                move сгенерирует ошибку. Обезопаситься от ошибки можно только перемещением файла с уникальным именем.
@@ -198,7 +210,6 @@ def jumptosource():
     except:
         status.config(text="***** Вы не выбрали папку для анализа")
         
-
 def jumptodest():                      
     try:
         os.startfile(PATH2DEST_FOLDER)
@@ -209,16 +220,14 @@ def BothScroll(*args):
     #обеспечивает одновременный скроллинг листбоксов одним скроллером
     display1.yview(*args)
     display2.yview(*args)
-    
-    
+        
 
 window = Tk()
 general_bg ="#BDBDBD" #цвет общего фона
 displays_bg = "#F5F6CE" #цвет фона дисплеев
-window.title("ReSort build 1.2.2 alpha")
+window.title("ReSort build 2.0.2 alpha")
 window.geometry("1000x600")
 window.configure(bg=general_bg)
-
 
 logo = Label(window, text="ReSort", bg=general_bg, font=("Brush Script MT", 32))
 logo.place(x=40, y=5)
@@ -243,8 +252,10 @@ button_source.place(x=40, y=85)
 button_dest = Button(window,text="Выберите папку назначения", padx="16", pady="20", command=dest_folder)
 button_dest.place(x=40, y=165)
 
-move_but = Radiobutton(window, text="Переместить", bg=general_bg)
-copy_but = Radiobutton(window, text="Только копировать", bg=general_bg)
+var=IntVar()
+var.set(0)
+move_but = Radiobutton(window, text="Переместить", bg=general_bg, variable=var, value=0)
+copy_but = Radiobutton(window, text="Только копировать", bg=general_bg, variable=var, value=1)
 move_but.place(x=50, y=245)
 copy_but.place(x=50, y=275)
 
