@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # Name:        ReSort
 # Author:      Denys Lozinskyi
-# Version:     v. 2.0.2 (GUI)
+# Version:     v. 2.0.3 beta (GUI)
 # ------------------------------------------------------------------------------
 
 import os, re, zipfile
@@ -216,6 +216,9 @@ def jumptodest():
     except:
         status.config(text="***** Вы не выбрали папку назначения")
 
+def info():
+    pass
+
 def BothScroll(*args):
     #обеспечивает одновременный скроллинг листбоксов одним скроллером
     display1.yview(*args)
@@ -225,8 +228,8 @@ def BothScroll(*args):
 window = Tk()
 general_bg ="#BDBDBD" #цвет общего фона
 displays_bg = "#F5F6CE" #цвет фона дисплеев
-window.title("ReSort build 2.0.2 alpha")
-window.geometry("1000x600")
+window.title("ReSort build 2.0.3 beta")
+window.geometry("1366x768+10+10")
 window.configure(bg=general_bg)
 
 logo = Label(window, text="ReSort", bg=general_bg, font=("Brush Script MT", 32))
@@ -241,15 +244,15 @@ display1 = Listbox(window, width=55, height=25, bd=2, bg=displays_bg, font=("Tim
 display1.place(x=300, y=85)
 
 display2 = Listbox(window, width=55, height=25, bd=2, bg=displays_bg, font=("Times New Roman", 12), yscrollcommand=scrollbar.set)
-display2.place(x=850, y=85)
+display2.place(x=830, y=85)
 
 arrow = Label(window, text="⇒", bg=general_bg, font=("Times New Roman", 32))
-arrow.place(x=775, y=325)
+arrow.place(x=765, y=325)
 
-button_source = Button(window,text="Выберите папку для анализа", padx="15", pady="20", command=source_folder)
+button_source = Button(window,text="Выберите папку для анализа", padx="15", pady="20", relief=RIDGE, command=source_folder)
 button_source.place(x=40, y=85)
 
-button_dest = Button(window,text="Выберите папку назначения", padx="16", pady="20", command=dest_folder)
+button_dest = Button(window,text="Выберите папку назначения", padx="16", pady="20", relief=RIDGE, command=dest_folder)
 button_dest.place(x=40, y=165)
 
 var=IntVar()
@@ -259,20 +262,22 @@ copy_but = Radiobutton(window, text="Только копировать", bg=gene
 move_but.place(x=50, y=245)
 copy_but.place(x=50, y=275)
 
-button_start = Button(window, text="Начать", padx="20", pady="20", command=ReSort)
+button_start = Button(window, text="Начать", padx="20", pady="20", relief=RIDGE, command=ReSort)
 button_start.place(x=95, y=325)
 
-button_jumptosource = Button(window,text="Перейти", padx="50", pady="10", command=jumptosource)
+button_jumptosource = Button(window,text="Перейти", padx="50", pady="10", relief=RIDGE, command=jumptosource)
 button_jumptosource.place(x=445, y=605)
 
-button_jumptodest = Button(window,text="Перейти", padx="50", pady="10", command=jumptodest)
+button_jumptodest = Button(window,text="Перейти", padx="50", pady="10", relief=RIDGE, command=jumptodest)
 button_jumptodest.place(x=1000, y=605)
 
 status = Label(window, text="***** Добро пожаловать в ReSort! Где будем искать файлы?", bd=5, bg="#E6E6E6", anchor=W)
 status.pack(side=BOTTOM, fill=X)
 
+info_button = Button(window, text="Инфо", padx="8", pady="15", relief=RIDGE, command=info)
+info_button.pack(side=TOP, anchor=E, padx=10, pady=10)
+
 #progress = ttk.Progressbar(status, orient="horizontal", length=191, mode="determinate")
 #progress.pack(side=BOTTOM, anchor=E)
 
 window.mainloop()
-
