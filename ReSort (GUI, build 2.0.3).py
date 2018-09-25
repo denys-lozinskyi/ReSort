@@ -274,8 +274,8 @@ button_jumptodest.place(x=1000, y=605)
 status = Label(window, text="***** Добро пожаловать в ReSort! Где будем искать файлы?", bd=5, bg="#E6E6E6", anchor=W)
 status.pack(side=BOTTOM, fill=X)
 
-info_button = Button(window, text="Инфо", padx="10", pady="12", relief=RIDGE, command=info)
-info_button.pack(side=TOP, anchor=E, padx=10, pady=15)
+info_button = Button(window, text="Info", font=("Brush Script MT", 26), width=5, height=1, bg=general_bg, relief=FLAT, activebackground=general_bg, command=info)
+info_button.pack(side=TOP, anchor=E)
 
 #progress = ttk.Progressbar(status, orient="horizontal", length=191, mode="determinate")
 #progress.pack(side=BOTTOM, anchor=E)
