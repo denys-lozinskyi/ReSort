@@ -229,7 +229,7 @@ window = Tk()
 general_bg ="#BDBDBD" #цвет общего фона
 displays_bg = "#F5F6CE" #цвет фона дисплеев
 window.title("ReSort build 2.0.3 beta")
-window.geometry("1366x768+10+10")
+window.geometry("1366x768")
 window.configure(bg=general_bg)
 
 logo = Label(window, text="ReSort", bg=general_bg, font=("Brush Script MT", 32))
@@ -274,8 +274,8 @@ button_jumptodest.place(x=1000, y=605)
 status = Label(window, text="***** Добро пожаловать в ReSort! Где будем искать файлы?", bd=5, bg="#E6E6E6", anchor=W)
 status.pack(side=BOTTOM, fill=X)
 
-info_button = Button(window, text="Инфо", padx="8", pady="15", relief=RIDGE, command=info)
-info_button.pack(side=TOP, anchor=E, padx=10, pady=10)
+info_button = Button(window, text="Инфо", padx="10", pady="12", relief=RIDGE, command=info)
+info_button.pack(side=TOP, anchor=E, padx=10, pady=15)
 
 #progress = ttk.Progressbar(status, orient="horizontal", length=191, mode="determinate")
 #progress.pack(side=BOTTOM, anchor=E)
