@@ -95,10 +95,10 @@ button_start = Button(window, text="Начать", padx="20", pady="20", relief=
 button_start.place(x=95, y=325)
 
 button_jumptosource = Button(window,text="Перейти", padx="50", pady="10", relief=RIDGE, command=jumptosource)
-button_jumptosource.place(x=445, y=605)
+button_jumptosource.place(x=440, y=605)
 
 button_jumptodest = Button(window,text="Перейти", padx="50", pady="10", relief=RIDGE, command=jumptodest)
-button_jumptodest.place(x=1000, y=605)
+button_jumptodest.place(x=985, y=605)
 
 status = Label(window, text="***** Добро пожаловать в ReSort! Где будем искать файлы?", bd=5, bg="#E6E6E6", anchor=W)
 status.pack(side=BOTTOM, fill=X)
