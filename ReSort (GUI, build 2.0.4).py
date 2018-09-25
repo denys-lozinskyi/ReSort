@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # Name:        ReSort
 # Author:      Denys Lozinskyi
-# Version:     v. 2.0.3 beta (GUI)
+# Version:     v. 2.0.4 beta (GUI)
 # ------------------------------------------------------------------------------
 
 import os, re, zipfile
@@ -223,14 +223,22 @@ def BothScroll(*args):
     #обеспечивает одновременный скроллинг листбоксов одним скроллером
     display1.yview(*args)
     display2.yview(*args)
-        
+
+def WithMouseWheel(event):
+    #обеспечивает одновременный скроллинг листбоксов колесиком мыши
+    display1.yview("scroll", int(-1*(event.delta/120)),"units")
+    display2.yview("scroll", int(-1*(event.delta/120)),"units")
+    # this prevents default bindings from firing, which
+    # would end up scrolling the widget twice
+    return "break"       
 
 window = Tk()
 general_bg ="#BDBDBD" #цвет общего фона
 displays_bg = "#F5F6CE" #цвет фона дисплеев
-window.title("ReSort build 2.0.3 beta")
+window.title("ReSort build 2.0.4 beta")
 window.geometry("1366x768")
 window.configure(bg=general_bg)
+#window.iconbitmap("icon.ico")
 
 logo = Label(window, text="ReSort", bg=general_bg, font=("Brush Script MT", 32))
 logo.place(x=40, y=5)
@@ -240,11 +248,13 @@ info.place(x=80, y=50)
 scrollbar = Scrollbar(window, orient="vertical", command=BothScroll)
 scrollbar.pack(side=RIGHT, fill=Y)
 
-display1 = Listbox(window, width=55, height=25, bd=2, bg=displays_bg, font=("Times New Roman", 12), yscrollcommand=scrollbar.set)
+display1 = Listbox(window, width=55, height=25, bd=2, bg=displays_bg, font=("Times New Roman", 12), exportselection=0, yscrollcommand=scrollbar.set)
 display1.place(x=300, y=85)
+display1.bind("<MouseWheel>", WithMouseWheel)
 
 display2 = Listbox(window, width=55, height=25, bd=2, bg=displays_bg, font=("Times New Roman", 12), yscrollcommand=scrollbar.set)
 display2.place(x=830, y=85)
+display2.bind("<MouseWheel>", WithMouseWheel)
 
 arrow = Label(window, text="⇒", bg=general_bg, font=("Times New Roman", 32))
 arrow.place(x=765, y=325)
