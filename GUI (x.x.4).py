@@ -1,6 +1,7 @@
 ####################
-#     GUI x.x.3    #
+#    GUI x.x.4     #
 ####################
+
 
 from tkinter import *
 from tkinter import filedialog
@@ -21,18 +22,6 @@ def dest_folder():
     else:
         status.config(text=("***** Папка для перемещения/копирования:    " + PATH2DEST_FOLDER))
 
-def lp():
-    #функция исключительно для тестирования вывода
-    for a in range(100):
-        display1.insert(END, (str(a) + " Bring yourself online, Dolores"))
-        display2.insert(END, (str(a) + " I am in a dream"))
-        window.update_idletasks()
-
-def BothScroll(*args):
-    #обеспечивает одновременный скроллинг листбоксов одним скроллером
-    display1.yview(*args)
-    display2.yview(*args)
-    
 def jumptosource():
     try:
         os.startfile(PATH2SOURCE_FOLDER)
@@ -45,6 +34,14 @@ def jumptodest():
     except:
         status.config(text="***** Вы не выбрали папку назначения")
 
+def lp():
+    #функция исключительно для тестирования вывода
+    for a in range(100):
+        display1.insert(END, (str(a) + " Bring yourself online, Dolores"))
+        display2.insert(END, (str(a) + " I am in a dream"))
+        window.update_idletasks()
+
+
 def info():
     pass
 
@@ -52,14 +49,22 @@ def BothScroll(*args):
     #обеспечивает одновременный скроллинг листбоксов одним скроллером
     display1.yview(*args)
     display2.yview(*args)
-        
+
+def WithMouseWheel(event):
+    #обеспечивает одновременный скроллинг листбоксов колесиком мыши
+    display1.yview("scroll", int(-1*(event.delta/120)),"units")
+    display2.yview("scroll", int(-1*(event.delta/120)),"units")
+    # this prevents default bindings from firing, which
+    # would end up scrolling the widget twice
+    return "break"       
 
 window = Tk()
 general_bg ="#BDBDBD" #цвет общего фона
 displays_bg = "#F5F6CE" #цвет фона дисплеев
-window.title("ReSort build 2.0.3 beta")
+window.title("ReSort build 2.0.4 beta")
 window.geometry("1366x768")
 window.configure(bg=general_bg)
+#window.iconbitmap("icon.ico")
 
 logo = Label(window, text="ReSort", bg=general_bg, font=("Brush Script MT", 32))
 logo.place(x=40, y=5)
@@ -69,11 +74,13 @@ info.place(x=80, y=50)
 scrollbar = Scrollbar(window, orient="vertical", command=BothScroll)
 scrollbar.pack(side=RIGHT, fill=Y)
 
-display1 = Listbox(window, width=55, height=25, bd=2, bg=displays_bg, font=("Times New Roman", 12), yscrollcommand=scrollbar.set)
+display1 = Listbox(window, width=55, height=25, bd=2, bg=displays_bg, font=("Times New Roman", 12), exportselection=0, yscrollcommand=scrollbar.set)
 display1.place(x=300, y=85)
+display1.bind("<MouseWheel>", WithMouseWheel)
 
 display2 = Listbox(window, width=55, height=25, bd=2, bg=displays_bg, font=("Times New Roman", 12), yscrollcommand=scrollbar.set)
 display2.place(x=830, y=85)
+display2.bind("<MouseWheel>", WithMouseWheel)
 
 arrow = Label(window, text="⇒", bg=general_bg, font=("Times New Roman", 32))
 arrow.place(x=765, y=325)
@@ -91,7 +98,7 @@ copy_but = Radiobutton(window, text="Только копировать", bg=gene
 move_but.place(x=50, y=245)
 copy_but.place(x=50, y=275)
 
-button_start = Button(window, text="Начать", padx="20", pady="20", relief=RIDGE, command=lp) #ReSort
+button_start = Button(window, text="Начать", padx="20", pady="20", relief=RIDGE, command=lp)
 button_start.place(x=95, y=325)
 
 button_jumptosource = Button(window,text="Перейти", padx="50", pady="10", relief=RIDGE, command=jumptosource)
@@ -110,3 +117,4 @@ info_button.pack(side=TOP, anchor=E)
 #progress.pack(side=BOTTOM, anchor=E)
 
 window.mainloop()
+
