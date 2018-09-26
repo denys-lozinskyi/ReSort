@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # Name:        ReSort
 # Author:      Denys Lozinskyi
-# Version:     v. 2.0.4 beta (GUI)
+# Version:     v. 2.0.5 beta (GUI)
 # ------------------------------------------------------------------------------
 
 import os, re, zipfile
@@ -195,6 +195,7 @@ def source_folder():
         return
     else:
         status.config(text=("***** Папка для анализа:    " + PATH2SOURCE_FOLDER))
+        status_source.config(text=PATH2SOURCE_FOLDER)
 
 def dest_folder():
     global PATH2DEST_FOLDER
@@ -203,6 +204,7 @@ def dest_folder():
         return
     else:
         status.config(text=("***** Папка для перемещения/копирования:    " + PATH2DEST_FOLDER))
+        status_dest.config(text=PATH2DEST_FOLDER)
 
 def jumptosource():
     try:
@@ -235,7 +237,7 @@ def WithMouseWheel(event):
 window = Tk()
 general_bg ="#BDBDBD" #цвет общего фона
 displays_bg = "#F5F6CE" #цвет фона дисплеев
-window.title("ReSort build 2.0.4 beta")
+window.title("ReSort build 2.0.5 beta")
 window.geometry("1366x768")
 window.configure(bg=general_bg)
 #window.iconbitmap("icon.ico")
@@ -249,18 +251,18 @@ scrollbar = Scrollbar(window, orient="vertical", command=BothScroll)
 scrollbar.pack(side=RIGHT, fill=Y)
 
 display1 = Listbox(window, width=55, height=25, bd=2, bg=displays_bg, font=("Times New Roman", 12), exportselection=0, yscrollcommand=scrollbar.set)
-display1.place(x=300, y=85)
+display1.place(x=300, y=115)
 display1.bind("<MouseWheel>", WithMouseWheel)
 
 display2 = Listbox(window, width=55, height=25, bd=2, bg=displays_bg, font=("Times New Roman", 12), yscrollcommand=scrollbar.set)
-display2.place(x=830, y=85)
+display2.place(x=830, y=115)
 display2.bind("<MouseWheel>", WithMouseWheel)
 
 arrow = Label(window, text="⇒", bg=general_bg, font=("Times New Roman", 32))
-arrow.place(x=765, y=325)
+arrow.place(x=765, y=335)
 
 button_source = Button(window,text="Выберите папку для анализа", padx="15", pady="20", relief=RIDGE, command=source_folder)
-button_source.place(x=40, y=85)
+button_source.place(x=40, y=90)
 
 button_dest = Button(window,text="Выберите папку назначения", padx="16", pady="20", relief=RIDGE, command=dest_folder)
 button_dest.place(x=40, y=165)
@@ -276,16 +278,22 @@ button_start = Button(window, text="Начать", padx="20", pady="20", relief=
 button_start.place(x=95, y=325)
 
 button_jumptosource = Button(window,text="Перейти", padx="50", pady="10", relief=RIDGE, command=jumptosource)
-button_jumptosource.place(x=440, y=605)
+button_jumptosource.place(x=445, y=625)
 
 button_jumptodest = Button(window,text="Перейти", padx="50", pady="10", relief=RIDGE, command=jumptodest)
-button_jumptodest.place(x=985, y=605)
+button_jumptodest.place(x=975, y=625)
 
 status = Label(window, text="***** Добро пожаловать в ReSort! Где будем искать файлы?", bd=5, bg="#E6E6E6", anchor=W)
 status.pack(side=BOTTOM, fill=X)
 
+status_source = Label(window, font=("Times New Roman", 12, "italic"), bg=general_bg, width=49)
+status_source.place(x=300, y=86)
+
+status_dest = Label(window, font=("Times New Roman", 12, "italic"), bg=general_bg, width=49)
+status_dest.place(x=830, y=86)
+
 info_button = Button(window, text="Info", font=("Brush Script MT", 26), width=5, height=1, bg=general_bg, relief=FLAT, activebackground=general_bg, command=info)
-info_button.pack(side=TOP, anchor=E)
+info_button.pack(side=TOP, anchor=E, padx=2, pady=2)
 
 #progress = ttk.Progressbar(status, orient="horizontal", length=191, mode="determinate")
 #progress.pack(side=BOTTOM, anchor=E)
