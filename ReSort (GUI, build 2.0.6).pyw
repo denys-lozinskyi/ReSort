@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # Name:        ReSort
 # Author:      Denys Lozinskyi
-# Version:     v. 2.0.5 beta (GUI)
+# Version:     v. 2.0.6 beta (GUI)
 # ------------------------------------------------------------------------------
 
 import os, re, zipfile
@@ -218,8 +218,23 @@ def jumptodest():
     except:
         status.config(text="***** Вы не выбрали папку назначения")
 
-def info():
-    pass
+def about():
+    info = Toplevel()
+    info.geometry("600x350+480+50")
+    info.resizable(False, False)
+    info.title("О программе")
+    info.config(bg="#BDBDBD")
+    content=Label(info, text="Программа Reference Sorting Tool (ReSort™)\nпредназначена \
+для поиска и каталогизации документов ДПК.\nПрограмма осуществляет поиск ДПК в формате .docx \
+на греческом, английском или русском языках в заданной пользователем директории,\nи позволяет \
+переместить или скопировать их в выбранную пользователем папку.\nВ процессе переноса/копирования программа \
+автоматически переименовывывает найденные ДПК в формат: 'Имя Фамилия, тип.docx'.\nИмя и фамилия для переименования \
+извлекаются программой из каждого конкретного документа.\n \
+Если имя и фамилию определить не удалось,\nпрограмма установит имя по-умолчанию - 'тип.docx'.\n \
+В случае повторения имени файла в целевой папке,
+                  к нему будет добавлен нумератор повторений.\n\n \
+Разработчик: Денис Лозинский, 2018", font=("Times New Roman", 12), bg="#E6E0F8", relief=SUNKEN, wraplength=560)
+    content.pack(fill=BOTH, expand=True)
 
 def BothScroll(*args):
     #обеспечивает одновременный скроллинг листбоксов одним скроллером
@@ -235,12 +250,13 @@ def WithMouseWheel(event):
     return "break"       
 
 window = Tk()
-general_bg ="#BDBDBD" #цвет общего фона
+general_bg = "#BDBDBD" #цвет общего фона
 displays_bg = "#F5F6CE" #цвет фона дисплеев
-window.title("ReSort build 2.0.5 beta")
+window.title("ReSort build 2.0.6 beta")
 window.geometry("1366x768")
 window.configure(bg=general_bg)
 #window.iconbitmap("icon.ico")
+
 
 logo = Label(window, text="ReSort", bg=general_bg, font=("Brush Script MT", 32))
 logo.place(x=40, y=5)
@@ -287,13 +303,13 @@ status = Label(window, text="***** Добро пожаловать в ReSort! Г
 status.pack(side=BOTTOM, fill=X)
 
 status_source = Label(window, font=("Times New Roman", 10, "italic"), bg=general_bg, width=63)
-status_source.place(x=300, y=63)
+status_source.place(x=300, y=68)
 
 status_dest = Label(window, font=("Times New Roman", 10, "italic"), bg=general_bg, width=63)
-status_dest.place(x=825, y=63)
+status_dest.place(x=825, y=68)
 
-info_button = Button(window, text="Info", font=("Brush Script MT", 24), width=4, height=1, bg=general_bg, relief=FLAT, activebackground=general_bg, command=info)
-info_button.pack(side=TOP, anchor=E, padx=3, pady=3)
+info_button = Button(window, text="Info", font=("Brush Script MT", 24), width=4, height=1, bg=general_bg, relief=FLAT, activebackground=general_bg, command=about)
+info_button.pack(side=TOP, anchor=E, padx=5, pady=5)
 
 #progress = ttk.Progressbar(status, orient="horizontal", length=191, mode="determinate")
 #progress.pack(side=BOTTOM, anchor=E)
