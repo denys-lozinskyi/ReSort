@@ -251,15 +251,15 @@ scrollbar = Scrollbar(window, orient="vertical", command=BothScroll)
 scrollbar.pack(side=RIGHT, fill=Y)
 
 display1 = Listbox(window, width=55, height=25, bd=2, bg=displays_bg, font=("Times New Roman", 12), exportselection=0, yscrollcommand=scrollbar.set)
-display1.place(x=300, y=115)
+display1.place(x=300, y=90)
 display1.bind("<MouseWheel>", WithMouseWheel)
 
 display2 = Listbox(window, width=55, height=25, bd=2, bg=displays_bg, font=("Times New Roman", 12), yscrollcommand=scrollbar.set)
-display2.place(x=830, y=115)
+display2.place(x=825, y=90)
 display2.bind("<MouseWheel>", WithMouseWheel)
 
 arrow = Label(window, text="⇒", bg=general_bg, font=("Times New Roman", 32))
-arrow.place(x=765, y=335)
+arrow.place(x=763, y=325)
 
 button_source = Button(window,text="Выберите папку для анализа", padx="15", pady="20", relief=RIDGE, command=source_folder)
 button_source.place(x=40, y=90)
@@ -278,22 +278,22 @@ button_start = Button(window, text="Начать", padx="20", pady="20", relief=
 button_start.place(x=95, y=325)
 
 button_jumptosource = Button(window,text="Перейти", padx="50", pady="10", relief=RIDGE, command=jumptosource)
-button_jumptosource.place(x=445, y=625)
+button_jumptosource.place(x=445, y=605)
 
 button_jumptodest = Button(window,text="Перейти", padx="50", pady="10", relief=RIDGE, command=jumptodest)
-button_jumptodest.place(x=975, y=625)
+button_jumptodest.place(x=970, y=605)
 
 status = Label(window, text="***** Добро пожаловать в ReSort! Где будем искать файлы?", bd=5, bg="#E6E6E6", anchor=W)
 status.pack(side=BOTTOM, fill=X)
 
-status_source = Label(window, font=("Times New Roman", 12, "italic"), bg=general_bg, width=49)
-status_source.place(x=300, y=86)
+status_source = Label(window, font=("Times New Roman", 10, "italic"), bg=general_bg, width=63)
+status_source.place(x=300, y=63)
 
-status_dest = Label(window, font=("Times New Roman", 12, "italic"), bg=general_bg, width=49)
-status_dest.place(x=830, y=86)
+status_dest = Label(window, font=("Times New Roman", 10, "italic"), bg=general_bg, width=63)
+status_dest.place(x=825, y=63)
 
-info_button = Button(window, text="Info", font=("Brush Script MT", 26), width=5, height=1, bg=general_bg, relief=FLAT, activebackground=general_bg, command=info)
-info_button.pack(side=TOP, anchor=E, padx=2, pady=2)
+info_button = Button(window, text="Info", font=("Brush Script MT", 24), width=4, height=1, bg=general_bg, relief=FLAT, activebackground=general_bg, command=info)
+info_button.pack(side=TOP, anchor=E, padx=3, pady=3)
 
 #progress = ttk.Progressbar(status, orient="horizontal", length=191, mode="determinate")
 #progress.pack(side=BOTTOM, anchor=E)
