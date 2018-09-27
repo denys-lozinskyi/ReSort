@@ -235,6 +235,12 @@ def about():
 Разработчик: Денис Лозинский\n2018", font=("Times New Roman", 12), bg="#E6E0F8", relief=SUNKEN, wraplength=560)
     content.pack(fill=BOTH, expand=True)
 
+def all_clear():
+    display1.delete(0, END)
+    display2.delete(0, END)
+    status_source.config(text="")
+    status_dest.config(text="")
+
 def BothScroll(*args):
     #обеспечивает одновременный скроллинг листбоксов одним скроллером
     display1.yview(*args)
@@ -255,7 +261,6 @@ window.title("ReSort build 2.0.6 beta")
 window.geometry("1366x768")
 window.configure(bg=general_bg)
 #window.iconbitmap("icon.ico")
-
 
 logo = Label(window, text="ReSort", bg=general_bg, font=("Brush Script MT", 32))
 logo.place(x=40, y=5)
@@ -298,7 +303,7 @@ button_jumptosource.place(x=445, y=605)
 button_jumptodest = Button(window,text="Перейти", padx="50", pady="10", relief=RIDGE, command=jumptodest)
 button_jumptodest.place(x=970, y=605)
 
-status = Label(window, text="***** Добро пожаловать в ReSort! Где будем искать файлы?", bd=5, bg="#E6E6E6", anchor=W)
+status = Label(window, text="***** Добро пожаловать в ReSort! Где будем искать файлы?", bd=7, bg="#E6E6E6", anchor=W)
 status.pack(side=BOTTOM, fill=X)
 
 status_source = Label(window, font=("Times New Roman", 10, "italic"), bg=general_bg, width=63)
@@ -309,6 +314,9 @@ status_dest.place(x=825, y=68)
 
 info_button = Button(window, text="Info", font=("Brush Script MT", 24), width=4, height=1, bg=general_bg, relief=FLAT, activebackground=general_bg, command=about)
 info_button.pack(side=TOP, anchor=E, padx=5, pady=5)
+
+clear_button = Button(window, text="Cброс", font=("Times New Roman", 8, "italic"), bg="#ECCEF5", padx="10", pady="1", relief=RIDGE, command=all_clear)
+clear_button.place(x=758, y=603)
 
 #progress = ttk.Progressbar(status, orient="horizontal", length=191, mode="determinate")
 #progress.pack(side=BOTTOM, anchor=E)
