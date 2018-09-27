@@ -190,7 +190,7 @@ def ReSort():
 
 def source_folder():
     global PATH2SOURCE_FOLDER
-    PATH2SOURCE_FOLDER = (filedialog.askdirectory(title = "Выберите папку с файлами") + "/")
+    PATH2SOURCE_FOLDER = (filedialog.askdirectory(title = "Выберите папку для анализа") + "/")
     if PATH2SOURCE_FOLDER == "/":
         return
     else:
@@ -199,7 +199,7 @@ def source_folder():
 
 def dest_folder():
     global PATH2DEST_FOLDER
-    PATH2DEST_FOLDER = (filedialog.askdirectory(title = "Выберите папку с файлами") + "/")
+    PATH2DEST_FOLDER = (filedialog.askdirectory(title = "Выберите папку для перемещения/копирования") + "/")
     if PATH2DEST_FOLDER == "/":
         return
     else:
