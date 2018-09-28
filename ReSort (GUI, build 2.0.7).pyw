@@ -241,6 +241,7 @@ def all_clear():
     display2.delete(0, END)
     status_source.config(text="")
     status_dest.config(text="")
+    status.config(text=">>>>> Выберите папки для анализа и каталогизации")
 
 def BothScroll(*args):
     #обеспечивает одновременный скроллинг листбоксов одним скроллером
