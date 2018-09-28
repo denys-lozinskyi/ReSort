@@ -140,27 +140,27 @@ def ReSort():
     try:
         files_to_scan = os.listdir(PATH2SOURCE_FOLDER)
     except:
-        status.config(text="***** Сначала выберите папку для анализа")
+        status.config(text=">>>>> Сначала выберите папку для анализа")
         return
     else:
         if PATH2SOURCE_FOLDER == "/":
-           status.config(text="***** Выберите папку для анализа")
+           status.config(text=">>>>> Выберите папку для анализа")
            return
     try:
         PATH2DEST_FOLDER == True
     except:
-        status.config(text="***** Выберите папку для перемещения/копирования")
+        status.config(text=">>>>> Выберите папку для перемещения/копирования")
         return
     else:
         if PATH2DEST_FOLDER == "/":
-            status.config(text="***** Выберите папку для перемещения/копирования")
+            status.config(text=">>>>> Выберите папку для перемещения/копирования")
             return
     
     display1.delete(0, END) #очищаем дисплеи
     display2.delete(0, END)
     #сканируем каждый файл из списка
     dpk_count = 0
-    status.config(text=("***** Обработка..."))
+    status.config(text=(">>>>> Обработка..."))
     for document in files_to_scan:
         if document[-5:] == ".docx":            
             #print(document)
