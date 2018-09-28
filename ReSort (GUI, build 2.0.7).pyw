@@ -309,7 +309,7 @@ button_jumptodest = Button(window,text="Перейти", padx="50", pady="10", r
 button_jumptodest.place(x=970, y=605)
 
 status = Label(window, text=">>>>> Добро пожаловать в ReSort! Где будем искать файлы?", font=("Times New Roman", 12), \
-               height=2, bg="#E6E0F8", relief=RIDGE, anchor=W)
+               height=1, bg="#E6E0F8", relief=RIDGE, padx=5, pady=6, anchor=W)
 status.pack(side=BOTTOM, fill=X)
 
 status_source = Label(window, font=("Times New Roman", 10, "italic"), bg=general_bg, fg="white", width=63)
@@ -326,7 +326,7 @@ clear_button = Button(window, text="Cброс", font=("Times New Roman", 8, "ita
 clear_button.place(x=758, y=603)
 
 #progress = ttk.Progressbar(status, orient="horizontal", length=191, mode="determinate")
-#progress.pack(side=BOTTOM, anchor=E)
+#progress.pack(side=BOTTOM, fill=Y, anchor=E)
 
 img=ImageTk.PhotoImage(Image.open("logo.png"))
 panel=Label(window, image=img, bg=general_bg)
