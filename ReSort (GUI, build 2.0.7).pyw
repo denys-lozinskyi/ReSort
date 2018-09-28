@@ -226,11 +226,11 @@ def about():
     info.title("О программе")
     info.config(bg="#BDBDBD")
     content=Label(info, text="Программа Reference Sorting Tool (ReSort™)\nпредназначена \
-для поиска и каталогизации документов ДПК.\nПрограмма осуществляет поиск ДПК в формате .docx \
-на греческом, английском и русском языках в заданной пользователем директории,\nи позволяет \
-переместить или скопировать их в выбранную пользователем папку.\nВ процессе переноса/копирования программа \
-автоматически переименовывывает найденные ДПК в формат: 'Имя Фамилия, тип.docx'.\nИмя и фамилия для переименования \
-извлекаются программой из каждого конкретного документа.\n \
+для автоматизации поиска и каталогизации документов ДПК.\nПрограмма осуществляет поиск ДПК в формате .docx \
+на греческом, английском и русском языках в заданной пользователем директории\nи автоматически \
+перемещает/копирует их в выбранный пользователем каталог.\nВ процессе переноса/копирования программа \
+автоматически переименовывывает все найденные ДПК в формат: 'Имя Фамилия, тип.docx'.\nИмя и фамилию \
+для переименования программа извлекает\nиз каждого отдельного документа.\n \
 Если имя и фамилию определить не удалось,\nпрограмма установит имя по-умолчанию - 'тип.docx'.\n \
 В случае повторения имени файла в целевой папке, к нему будет добавлен нумератор повторений.\n\n \
 Разработчик: Денис Лозинский\n2018", font=("Times New Roman", 12), bg="#E6E0F8", relief=SUNKEN, wraplength=560)
@@ -282,7 +282,7 @@ display2.place(x=825, y=90)
 display2.bind("<MouseWheel>", WithMouseWheel)
 
 arrow = Label(window, text="⇒", bg=general_bg, fg="white", font=("Times New Roman", 32))
-arrow.place(x=763, y=325)
+arrow.place(x=762, y=325)
 
 button_source = Button(window,text="Выберите папку для анализа", padx="15", pady="20", relief=RIDGE, command=source_folder)
 button_source.place(x=40, y=90)
@@ -309,7 +309,7 @@ button_jumptodest = Button(window,text="Перейти", padx="50", pady="10", r
 button_jumptodest.place(x=970, y=605)
 
 status = Label(window, text=">>>>> Добро пожаловать в ReSort! Где будем искать файлы?", font=("Times New Roman", 12), \
-               height=1, bg="#E6E0F8", relief=RIDGE, padx=5, pady=6, anchor=W)
+               height=1, bg="#E6E0F8", relief=RIDGE, padx=5, pady=5, anchor=W)
 status.pack(side=BOTTOM, fill=X)
 
 status_source = Label(window, font=("Times New Roman", 10, "italic"), bg=general_bg, fg="white", width=63)
