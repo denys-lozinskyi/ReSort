@@ -328,7 +328,7 @@ clear_button.place(x=758, y=603)
 #progress = ttk.Progressbar(status, orient="horizontal", length=191, mode="determinate")
 #progress.pack(side=BOTTOM, anchor=E)
 
-img=ImageTk.PhotoImage(Image.open("G:\\Python\\file_parsing\\ReSort\\logo.png"))
+img=ImageTk.PhotoImage(Image.open("logo.png"))
 panel=Label(window, image=img, bg=general_bg)
 panel.place(x=75, y=440)
 
