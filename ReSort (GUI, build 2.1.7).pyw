@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # Name:        ReSort
 # Author:      Denys Lozinskyi
-# Version:     v. 2.0.7 beta (dark GUI)
+# Version:     v. 2.1.7 beta (dark GUI)
 # ------------------------------------------------------------------------------
 
 import os, re, zipfile
@@ -241,6 +241,10 @@ def all_clear():
     display2.delete(0, END)
     status_source.config(text="")
     status_dest.config(text="")
+    global PATH2SOURCE_FOLDER
+    PATH2SOURCE_FOLDER = "/"
+    global PATH2DEST_FOLDER
+    PATH2DEST_FOLDER = "/"
     status.config(text=">>>>> Выберите папки для анализа и каталогизации")
 
 def BothScroll(*args):
@@ -259,7 +263,7 @@ def WithMouseWheel(event):
 window = Tk()
 general_bg = "#1D2129" #цвет общего фона
 displays_bg = "#F5F6CE" #цвет фона дисплеев
-window.title("ReSort build 2.0.7 beta")
+window.title("ReSort build 2.1.7 beta")
 window.geometry("1366x768")
 window.configure(bg=general_bg)
 window.iconbitmap("ReSort.ico")
