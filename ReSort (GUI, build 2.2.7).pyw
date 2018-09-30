@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # Name:        ReSort
 # Author:      Denys Lozinskyi
-# Version:     v. 2.1.7 beta (dark GUI)
+# Version:     v. 2.2.7 beta (dark GUI)
 # ------------------------------------------------------------------------------
 
 import os, re, zipfile
@@ -136,7 +136,8 @@ def if_dublicate_title(file_name):
     return file_name
 
 
-def ReSort():  
+def ReSort():
+    
     try:
         files_to_scan = os.listdir(PATH2SOURCE_FOLDER)
     except:
@@ -146,6 +147,7 @@ def ReSort():
         if PATH2SOURCE_FOLDER == "/":
            status.config(text=">>>>> Выберите папку для анализа")
            return
+
     try:
         PATH2DEST_FOLDER == True
     except:
@@ -155,6 +157,7 @@ def ReSort():
         if PATH2DEST_FOLDER == "/":
             status.config(text=">>>>> Выберите папку для перемещения/копирования")
             return
+    
     
     display1.delete(0, END) #очищаем дисплеи
     display2.delete(0, END)
@@ -190,22 +193,36 @@ def ReSort():
     return
 
 def source_folder():
+    """как оказалось на практике, askfordirectory возвращает "/" каждый раз
+       при нажатии на кнопку "Отмена" в диалоговом окне, что переписывало пути
+       в глобальных переменных. Т.е., ты выбрал папку, нажал на кнокпку еще раз, но вместо
+       выбора нажал "отмену" и путь превратился в слэш, дальше нужно выбрать путь заново.
+       Чтобы это предотвратить, решил ввести дополнительные переменные pre_path_s, которые
+       сохраняют то, что возвращает askfordirectory, и передают значение в глобальную
+       переменную, если значение не равно слэшу. Если же значение равно слэшу (была нажата отмена),
+       программа не меняет глобальные переменные. Таким образом в глобальных переменных слэши появляются
+       только после очистки экранов с all_clear. Делать глобалки равными пустой строке нельзя,
+       потому что несмотря на то, что os.listdir("") выдаст ошибку, os.startfile("") в jump-ах откроет
+       окно корневого каталога, а нам нужна ошибка для обработки
+    """
     global PATH2SOURCE_FOLDER
-    PATH2SOURCE_FOLDER = (filedialog.askdirectory(title = "Выберите папку для анализа") + "/")
-    if PATH2SOURCE_FOLDER == "/":
-        return
-    else:
+    pre_path_source = (filedialog.askdirectory(title = "Выберите папку для анализа") + "/")
+    if pre_path_source != "/":
+        PATH2SOURCE_FOLDER = pre_path_source
         status.config(text=(">>>>> Папка для анализа:    " + PATH2SOURCE_FOLDER))
         status_source.config(text=PATH2SOURCE_FOLDER)
+    return
+
 
 def dest_folder():
     global PATH2DEST_FOLDER
-    PATH2DEST_FOLDER = (filedialog.askdirectory(title = "Выберите папку для перемещения/копирования") + "/")
-    if PATH2DEST_FOLDER == "/":
-        return
-    else:
+    pre_path_dest = (filedialog.askdirectory(title = "Выберите папку для перемещения/копирования") + "/")
+    if pre_path_dest != "/":
+        PATH2DEST_FOLDER = pre_path_dest
         status.config(text=(">>>>> Папка для перемещения/копирования:    " + PATH2DEST_FOLDER))
         status_dest.config(text=PATH2DEST_FOLDER)
+    return
+        
 
 def jumptosource():
     try:
@@ -263,7 +280,7 @@ def WithMouseWheel(event):
 window = Tk()
 general_bg = "#1D2129" #цвет общего фона
 displays_bg = "#F5F6CE" #цвет фона дисплеев
-window.title("ReSort build 2.1.7 beta")
+window.title("ReSort build 2.2.7 beta")
 window.geometry("1366x768")
 window.configure(bg=general_bg)
 window.iconbitmap("ReSort.ico")
