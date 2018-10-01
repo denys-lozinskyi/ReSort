@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # Name:        ReSort
 # Author:      Denys Lozinskyi
-# Version:     v. 2.2.7 beta (dark GUI)
+# Version:     v. 2.2.8 beta (progressbar ed)
 # ------------------------------------------------------------------------------
 
 import os, re, zipfile
@@ -161,10 +161,15 @@ def ReSort():
     
     display1.delete(0, END) #очищаем дисплеи
     display2.delete(0, END)
+    progress["maximum"] = len(files_to_scan) #устанавливаем верхний порог для прогрессбара - количество файлов в папке
+    progress_value = 0 #начальное значение прогрессбара
     #сканируем каждый файл из списка
     dpk_count = 0
     status.config(text=(">>>>> Обработка..."))
     for document in files_to_scan:
+        progress_value += 1 #увеличиваем начальное значение прогрессбара для вычисления дельты
+        progress["value"] = progress_value
+        progress.update() #обновление прогрессбара
         if document[-5:] == ".docx":            
             #print(document)
             file = get_docx_text(PATH2SOURCE_FOLDER + document)
@@ -202,7 +207,7 @@ def source_folder():
        переменную, если значение не равно слэшу. Если же значение равно слэшу (была нажата отмена),
        программа не меняет глобальные переменные. Таким образом в глобальных переменных слэши появляются
        только после очистки экранов с all_clear. Делать глобалки равными пустой строке нельзя,
-       потому что несмотря на то, что os.listdir("") выдаст ошибку, os.startfile("") в jump-ах откроет
+       потому что несмотря на то, что os.listdir("") выдаст ошибку, os.startfile("") откроет
        окно корневого каталога, а нам нужна ошибка для обработки
     """
     global PATH2SOURCE_FOLDER
@@ -256,6 +261,7 @@ def about():
 def all_clear():
     display1.delete(0, END)
     display2.delete(0, END)
+    progress["value"] = 0 #обнуление и очистка прогрессбара
     status_source.config(text="")
     status_dest.config(text="")
     global PATH2SOURCE_FOLDER
@@ -280,7 +286,7 @@ def WithMouseWheel(event):
 window = Tk()
 general_bg = "#1D2129" #цвет общего фона
 displays_bg = "#F5F6CE" #цвет фона дисплеев
-window.title("ReSort build 2.2.7 beta")
+window.title("ReSort build 2.2.8 beta")
 window.geometry("1366x768")
 window.configure(bg=general_bg)
 window.iconbitmap("ReSort.ico")
@@ -347,8 +353,8 @@ info_button.pack(side=TOP, anchor=E, padx=5, pady=5)
 clear_button = Button(window, text="Cброс", font=("Times New Roman", 8, "italic"), bg="#ECCEF5", padx="10", pady="1", relief=RIDGE, command=all_clear)
 clear_button.place(x=758, y=603)
 
-#progress = ttk.Progressbar(status, orient="horizontal", length=191, mode="determinate")
-#progress.pack(side=BOTTOM, fill=Y, anchor=E)
+progress = ttk.Progressbar(window, orient="horizontal", mode="determinate")
+progress.place(in_=status, relx=0.835, rely=0.02, relwidth=0.165, relheight=0.99)
 
 img=ImageTk.PhotoImage(Image.open("logo.png"))
 panel=Label(window, image=img, bg=general_bg)
