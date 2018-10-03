@@ -170,6 +170,7 @@ def ReSort():
         progress_value += 1 #увеличиваем начальное значение прогрессбара для вычисления дельты
         progress["value"] = progress_value
         progress.update() #обновление прогрессбара
+        percentage.config(text=str(int((progress_value / progress["maximum"]) * 100)) + " %") #расчет и вывод процента выполнения программы
         if document[-5:] == ".docx":            
             #print(document)
             file = get_docx_text(PATH2SOURCE_FOLDER + document)
@@ -207,7 +208,7 @@ def source_folder():
        переменную, если значение не равно слэшу. Если же значение равно слэшу (была нажата отмена),
        программа не меняет глобальные переменные. Таким образом в глобальных переменных слэши появляются
        только после очистки экранов с all_clear. Делать глобалки равными пустой строке нельзя,
-       потому что несмотря на то, что os.listdir("") выдаст ошибку, os.startfile("") откроет
+       потому что несмотря на то, что os.listdir("") выдаст ошибку, os.startfile("") в jump-ах откроет
        окно корневого каталога, а нам нужна ошибка для обработки
     """
     global PATH2SOURCE_FOLDER
@@ -264,6 +265,7 @@ def all_clear():
     progress["value"] = 0 #обнуление и очистка прогрессбара
     status_source.config(text="")
     status_dest.config(text="")
+    percentage.config(text="")
     global PATH2SOURCE_FOLDER
     PATH2SOURCE_FOLDER = "/"
     global PATH2DEST_FOLDER
@@ -355,6 +357,9 @@ clear_button.place(x=758, y=603)
 
 progress = ttk.Progressbar(window, orient="horizontal", mode="determinate")
 progress.place(in_=status, relx=0.835, rely=0.02, relwidth=0.165, relheight=0.99)
+
+percentage = Label(window, font=("Times New Roman", 10), bg="#E6E0F8")
+percentage.place(in_=status, relx=0.805, rely=0.15)
 
 img=ImageTk.PhotoImage(Image.open("logo.png"))
 panel=Label(window, image=img, bg=general_bg)
