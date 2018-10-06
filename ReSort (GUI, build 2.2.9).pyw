@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # Name:        ReSort
 # Author:      Denys Lozinskyi
-# Version:     v. 2.2.8 beta (progressbar ed)
+# Version:     v. 2.2.9 beta
 # ------------------------------------------------------------------------------
 
 import os, re, zipfile
@@ -67,6 +67,7 @@ def is_dpk(file):
         if control == 0:
             return False
     return True
+
 
 def title_maker(file):
     '''функция принимает файл дпк, находит в нем имя и фамилию того, кому выдана справка,
@@ -170,7 +171,7 @@ def ReSort():
         progress_value += 1 #увеличиваем начальное значение прогрессбара для вычисления дельты
         progress["value"] = progress_value
         progress.update() #обновление прогрессбара
-        percentage.config(text=str(int((progress_value / progress["maximum"]) * 100)) + " %") #расчет и вывод процента выполнения программы
+        percentage.config(text=str(int((progress_value / progress["maximum"]) * 100)) + " %") #расчет и вывод прогресса выполнения в процентах
         if document[-5:] == ".docx":            
             #print(document)
             file = get_docx_text(PATH2SOURCE_FOLDER + document)
@@ -195,8 +196,9 @@ def ReSort():
     if dpk_count == 0:
         status.config(text=">>>>> В выбранной папке файлы ДПК отсутствуют")
     else:
-        status.config(text=(">>>>> Процесс завершен. Было обнаружено и перенесено " + str(dpk_count) + " ДПК"))
+        status.config(text=(">>>>> Процесс завершен. Было обнаружено и каталогизировано " + str(dpk_count) + " ДПК"))
     return
+
 
 def source_folder():
     """как оказалось на практике, askfordirectory возвращает "/" каждый раз
@@ -218,7 +220,6 @@ def source_folder():
         status.config(text=(">>>>> Папка для анализа:    " + PATH2SOURCE_FOLDER))
         status_source.config(text=PATH2SOURCE_FOLDER)
     return
-
 
 def dest_folder():
     global PATH2DEST_FOLDER
@@ -242,13 +243,17 @@ def jumptodest():
     except:
         status.config(text=">>>>> Вы не выбрали папку назначения")
 
+
 def about():
-    info = Toplevel()
-    info.geometry("600x350+480+50")
-    info.resizable(False, False)
-    info.title("О программе")
-    info.config(bg="#BDBDBD")
-    content=Label(info, text="Программа Reference Sorting Tool (ReSort™)\nпредназначена \
+    if is_opened.get() == 0: #если окно пока не создано - создать
+        global info #если оставить локальной, блок else не отработает корректно
+        info = Toplevel()
+        info.geometry("600x350+480+50")
+        info.resizable(False, False)
+        info.title("О программе")
+        info.config(bg="#BDBDBD")
+        info.protocol("WM_DELETE_WINDOW", destroy_info) #если окно будет закрываться с windows - перейти на destroy_info
+        content=Label(info, text="Программа Reference Sorting Tool (ReSort™)\nпредназначена \
 для автоматизации поиска и каталогизации документов ДПК.\nПрограмма осуществляет поиск ДПК в формате .docx \
 на греческом, английском и русском языках в заданной пользователем директории\nи автоматически \
 перемещает/копирует их в выбранный пользователем каталог.\nВ процессе переноса/копирования программа \
@@ -257,7 +262,17 @@ def about():
 Если имя и фамилию определить не удалось,\nпрограмма установит имя по-умолчанию - 'тип.docx'.\n \
 В случае повторения имени файла в целевой папке, к нему будет добавлен нумератор повторений.\n\n \
 Разработчик: Денис Лозинский\n2018", font=("Times New Roman", 12), bg="#E6E0F8", relief=SUNKEN, wraplength=560)
-    content.pack(fill=BOTH, expand=True)
+        content.pack(fill=BOTH, expand=True)
+        is_opened.set(1) #помечаем окно созданным
+    else:
+        destroy_info() #если окно уже создано - закрыть
+
+    
+def destroy_info():
+    #закрывает окно "о программе" и обнуляет маркер is_opened
+    info.destroy()
+    is_opened.set(0)
+    
 
 def all_clear():
     display1.delete(0, END)
@@ -271,6 +286,7 @@ def all_clear():
     global PATH2DEST_FOLDER
     PATH2DEST_FOLDER = "/"
     status.config(text=">>>>> Выберите папки для анализа и каталогизации")
+
 
 def BothScroll(*args):
     #обеспечивает одновременный скроллинг листбоксов одним скроллером
@@ -288,7 +304,7 @@ def WithMouseWheel(event):
 window = Tk()
 general_bg = "#1D2129" #цвет общего фона
 displays_bg = "#F5F6CE" #цвет фона дисплеев
-window.title("ReSort build 2.2.8 beta")
+window.title("ReSort build 2.2.9 beta")
 window.geometry("1366x768")
 window.configure(bg=general_bg)
 window.iconbitmap("ReSort.ico")
@@ -348,6 +364,8 @@ status_source.place(x=300, y=68)
 status_dest = Label(window, font=("Times New Roman", 10, "italic"), bg=general_bg, fg="white", width=63)
 status_dest.place(x=825, y=68)
 
+is_opened = IntVar() #переменная-маркер, указывающая на статус окна "О программе"
+is_opened.set(0) # 0 - не создано, 1 - создано
 info_button = Button(window, text="Info", font=("Brush Script MT", 24), fg="white", width=4, height=1, bg=general_bg, \
                      activeforeground="#E6E0F8", activebackground=general_bg, relief=FLAT, command=about)
 info_button.pack(side=TOP, anchor=E, padx=5, pady=5)
