@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # Name:        ReSort
 # Author:      Denys Lozinskyi
-# Version:     v. 2.2.9 beta
+# Version:     v. 2.3.9 beta
 # ------------------------------------------------------------------------------
 
 import os, re, zipfile
@@ -33,11 +33,10 @@ def get_docx_text(path):
         if texts:
             paragraphs.append(''.join(texts))
     joint_text = ' '.join(paragraphs)
-    
-    result_list = re.findall(r'\w+', joint_text) #на выходе имеем список слов без пробелов в формате юникод
-    result_str = ' '.join(result_list) #на выходе имеем текст в виде строки без знаков пунктуации
-
-    return result_str
+    joint_text = joint_text.lower() #нужно для корректной работы title_maker 
+    result_list = re.findall(r'\w+', joint_text) #на выходе имеем список слов без пробелов и знаков препинания в формате юникод
+        
+    return result_list
 
 
 def is_dpk(file):
@@ -76,30 +75,27 @@ def title_maker(file):
        Михаил Васнецов(n).docx. Если имя в файле найти не удалось, возвращает default_name(n).docx
     '''
     
-    default_name = 'справка о каноничности.docx'
-    file_content = file.split()
-    #print(file_content)    
-    for i in range(len(file_content)):
-        #print(file_content[i])
-        
-        if file_content[i] == 'свидетельствуем':
-            name = str(file_content[i+3])
-            if file_content[i+5] == 'миру':
-                surname = str(file_content[i+7])
+    default_name = 'справка о каноничности.docx' 
+    for i in range(len(file)):
+        #print(file[i])        
+        if file[i] == 'свидетельствуем':
+            name = str(file[i+3])
+            if file[i+5] == 'миру':
+                surname = str(file[i+7])
             else:
-                surname = str(file_content[i+4])
-        elif file_content[i] == 'certify':
-            name = str(file_content[i+3])
-            if file_content[i+5] == 'name':
-                surname = str(file_content[i+7])
+                surname = str(file[i+4])
+        elif file[i] == 'certify':
+            name = str(file[i+3])
+            if file[i+5] == 'name':
+                surname = str(file[i+7])
             else:
-                surname = str(file_content[i+4])
-        elif file_content[i] == 'βεβαίωσιν':
-            name = str(file_content[i+2])
-            if file_content[i+4] == 'κόσμον':
-                surname = str(file_content[i+6])
+                surname = str(file[i+4])
+        elif file[i] == 'βεβαίωσιν':
+            name = str(file[i+2])
+            if file[i+4] == 'κόσμον':
+                surname = str(file[i+6])
             else:
-                surname = str(file_content[i+3])        
+                surname = str(file[i+3])        
     try:                    
         title = name.capitalize() + ' ' + surname.capitalize() + ', о каноничности.docx'
         #print(title)
@@ -164,8 +160,9 @@ def ReSort():
     display2.delete(0, END)
     progress["maximum"] = len(files_to_scan) #устанавливаем верхний порог для прогрессбара - количество файлов в папке
     progress_value = 0 #начальное значение прогрессбара
+
     #сканируем каждый файл из списка
-    dpk_count = 0
+    dpk_count = 0 #устанавливаем счетчик ДПК
     status.config(text=(">>>>> Обработка..."))
     for document in files_to_scan:
         progress_value += 1 #увеличиваем начальное значение прогрессбара для вычисления дельты
@@ -174,8 +171,7 @@ def ReSort():
         percentage.config(text=str(int((progress_value / progress["maximum"]) * 100)) + " %") #расчет и вывод прогресса выполнения в процентах
         if document[-5:] == ".docx":            
             #print(document)
-            file = get_docx_text(PATH2SOURCE_FOLDER + document)
-            file = file.lower()    
+            file = get_docx_text(PATH2SOURCE_FOLDER + document)   
             #print(file)
             if is_dpk(file):
                 dpk_count += 1
@@ -304,7 +300,7 @@ def WithMouseWheel(event):
 window = Tk()
 general_bg = "#1D2129" #цвет общего фона
 displays_bg = "#F5F6CE" #цвет фона дисплеев
-window.title("ReSort build 2.2.9 beta")
+window.title("ReSort build 2.3.9 beta")
 window.geometry("1366x768")
 window.configure(bg=general_bg)
 window.iconbitmap("ReSort.ico")
