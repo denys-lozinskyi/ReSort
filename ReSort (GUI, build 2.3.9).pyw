@@ -1,7 +1,7 @@
 #-------------------------------------------------------------------------------
 # Name:        ReSort
 # Author:      Denys Lozinskyi
-# Version:     v. 2.3.9 beta
+# Version:     v. 2.3.9  (RC)
 # ------------------------------------------------------------------------------
 
 import os, re, zipfile
@@ -141,20 +141,18 @@ def ReSort():
         status.config(text=">>>>> Сначала выберите папку для анализа")
         return
     else:
-        if PATH2SOURCE_FOLDER == "/":
+        if PATH2SOURCE_FOLDER == "/": # в переменной сохраняется слеш после сброса кнопкой Сброс. Слеш - условность
            status.config(text=">>>>> Выберите папку для анализа")
            return
 
     try:
-        PATH2DEST_FOLDER == True
-    except:
-        status.config(text=">>>>> Выберите папку для перемещения/копирования")
-        return
-    else:
-        if PATH2DEST_FOLDER == "/":
+        if PATH2DEST_FOLDER == "/": # в переменной сохраняется слеш после сброса кнопкой Сброс. Слеш - условность
             status.config(text=">>>>> Выберите папку для перемещения/копирования")
             return
-    
+    except:        
+        status.config(text=">>>>> Выберите папку для перемещения/копирования")
+        return
+
     
     display1.delete(0, END) #очищаем дисплеи
     display2.delete(0, END)
