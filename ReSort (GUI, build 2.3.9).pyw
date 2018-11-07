@@ -4,11 +4,15 @@
 # Version:     v. 2.3.9  (RC)
 # ------------------------------------------------------------------------------
 
-import os, re, zipfile
+import os
+import re
+import zipfile
 from shutil import move, copy2
 from xml.etree.ElementTree import XML
+
 from tkinter import *
 from tkinter import filedialog, ttk
+
 from PIL import ImageTk, Image
 
 
@@ -17,7 +21,7 @@ def get_docx_text(path):
        Разработчик ядра модуля: Etienne, http://etienned.github.io/posts/extract-text-from-word-docx-simply/
        Адаптировано для парсинга по docx и ReSort: Денис Лозинский
     """
-    #ниже - переменные, необходимые для docx парсинга, поскольку файлы docx представляют из себя заархивированные namespaced XML
+    # ниже - переменные, необходимые для docx парсинга, поскольку файлы docx представляют из себя заархивированные namespaced XML
     word_namespace = '{http://schemas.openxmlformats.org/wordprocessingml/2006/main}'
     para = word_namespace + 'p'
     text = word_namespace + 't'
@@ -33,8 +37,8 @@ def get_docx_text(path):
         if texts:
             paragraphs.append(''.join(texts))
     joint_text = ' '.join(paragraphs)
-    joint_text = joint_text.lower() #нужно для корректной работы title_maker 
-    result_list = re.findall(r'\w+', joint_text) #на выходе имеем список слов без пробелов и знаков препинания в формате юникод
+    joint_text = joint_text.lower()  # нужно для корректной работы title_maker 
+    result_list = re.findall(r'\w+', joint_text)  # на выходе имеем список слов без пробелов и знаков препинания в формате юникод
         
     return result_list
 
@@ -109,7 +113,7 @@ def title_maker(file):
         return if_dublicate_title(title)
     else:
         display2.insert(END, title)
-        display2.yview(END) #следить за скроллом, при необходимости - удалить
+        display2.yview(END)  # следить за скроллом, при необходимости - удалить
         window.update_idletasks()
         return title
 
@@ -121,32 +125,35 @@ def if_dublicate_title(file_name):
        соответствующее количеству повторений имени файла в папке
     '''
     
-    title_constructor = file_name.split('.') #отделяем имя файла от расширения, попутно образовывая список
-    title_constructor.append(1) #добавляем в список нумератор повторений
+    title_constructor = file_name.split('.')  # отделяем имя файла от расширения, попутно образовывая список
+    title_constructor.append(1)  # добавляем в список нумератор повторений
     #print(title_constructor)
-    while file_name in os.listdir(PATH2DEST_FOLDER): #до тех пор, пока файл с таким именем присутствует в папке
-        title_constructor[2] += 1 #увеличиваем нумератор на единицу
-        file_name = ('%s' + '(%s).' + '%s') %(title_constructor[0], title_constructor[2], title_constructor[1]) #собираем новое имя файла и снова отдаем его на проверку
+    while file_name in os.listdir(PATH2DEST_FOLDER):  # до тех пор, пока файл с таким именем присутствует в папке
+        title_constructor[2] += 1  # увеличиваем нумератор на единицу
+        # собираем новое имя файла и снова отдаем его на проверку
+        file_name = ('%s' + '(%s).' + '%s') %(title_constructor[0], title_constructor[2], title_constructor[1])
     display2.insert(END, file_name)
-    display2.yview(END) #следить за скроллом, при необходимости - удалить
+    display2.yview(END)  # следить за скроллом, при необходимости - удалить
     window.update_idletasks()
     return file_name
 
 
 def ReSort():
-    
+    """
+       Главная функция
+    """
     try:
         files_to_scan = os.listdir(PATH2SOURCE_FOLDER)
     except:
         status.config(text=">>>>> Сначала выберите папку для анализа")
         return
     else:
-        if PATH2SOURCE_FOLDER == "/": # в переменной сохраняется слеш после сброса кнопкой Сброс. Слеш - условность
+        if PATH2SOURCE_FOLDER == "/":  # в переменной сохраняется слеш после сброса кнопкой Сброс. Слеш - условность
            status.config(text=">>>>> Выберите папку для анализа")
            return
 
     try:
-        if PATH2DEST_FOLDER == "/": # в переменной сохраняется слеш после сброса кнопкой Сброс. Слеш - условность
+        if PATH2DEST_FOLDER == "/":  # в переменной сохраняется слеш после сброса кнопкой Сброс. Слеш - условность
             status.config(text=">>>>> Выберите папку для перемещения/копирования")
             return
     except:        
@@ -154,19 +161,20 @@ def ReSort():
         return
 
     
-    display1.delete(0, END) #очищаем дисплеи
+    display1.delete(0, END)  # очищаем дисплеи
     display2.delete(0, END)
-    progress["maximum"] = len(files_to_scan) #устанавливаем верхний порог для прогрессбара - количество файлов в папке
-    progress_value = 0 #начальное значение прогрессбара
+    progress["maximum"] = len(files_to_scan)  # устанавливаем верхний порог для прогрессбара - количество файлов в папке
+    progress_value = 0  # начальное значение прогрессбара
 
-    #сканируем каждый файл из списка
-    dpk_count = 0 #устанавливаем счетчик ДПК
+    # сканируем каждый файл из списка
+    dpk_count = 0  # устанавливаем счетчик ДПК
     status.config(text=(">>>>> Обработка..."))
     for document in files_to_scan:
-        progress_value += 1 #увеличиваем начальное значение прогрессбара для вычисления дельты
+        progress_value += 1  # увеличиваем начальное значение прогрессбара для вычисления дельты
         progress["value"] = progress_value
-        progress.update() #обновление прогрессбара
-        percentage.config(text=str(int((progress_value / progress["maximum"]) * 100)) + " %") #расчет и вывод прогресса выполнения в процентах
+        progress.update()  # обновление прогрессбара
+        # расчет и вывод прогресса выполнения в процентах
+        percentage.config(text=str(int((progress_value / progress["maximum"]) * 100)) + " %")
         if document[-5:] == ".docx":            
             #print(document)
             file = get_docx_text(PATH2SOURCE_FOLDER + document)   
@@ -174,12 +182,12 @@ def ReSort():
             if is_dpk(file):
                 dpk_count += 1
                 display1.insert(END, document)
-                display1.yview(END) #следить за скроллом, при необходимости - удалить
-                window.update_idletasks() #необходим, чтобы строки выводились по мере выполнения программы, а не все сразу в конце
+                display1.yview(END)  # следить за скроллом, при необходимости - удалить
+                window.update_idletasks()  # необходим, чтобы строки выводились по мере выполнения программы, а не все сразу в конце
                 if var.get() == 0:
-                    move(PATH2SOURCE_FOLDER + document, PATH2DEST_FOLDER + title_maker(file)) #перемещение файла в папку с переименованием
+                    move(PATH2SOURCE_FOLDER + document, PATH2DEST_FOLDER + title_maker(file))  # перемещение файла в папку с переименованием
                 elif var.get() == 1:
-                    copy2(PATH2SOURCE_FOLDER + document, PATH2DEST_FOLDER + title_maker(file)) #копирование файла в папку с переименованием
+                    copy2(PATH2SOURCE_FOLDER + document, PATH2DEST_FOLDER + title_maker(file))  # копирование файла в папку с переименованием
             '''перемеименование лучше совместить с перемещением (благо, shutil.move это позволяет, т.к. сам использует os.rename)
                поскольку если перед перещением в папке назначения уже будет присутствовать файл с таким же именем,
                move сгенерирует ошибку. Обезопаситься от ошибки можно только перемещением файла с уникальным именем.
@@ -197,7 +205,7 @@ def ReSort():
 def source_folder():
     """как оказалось на практике, askfordirectory возвращает "/" каждый раз
        при нажатии на кнопку "Отмена" в диалоговом окне, что переписывало пути
-       в глобальных переменных. Т.е., ты выбрал папку, нажал на кнокпку еще раз, но вместо
+       в глобальных переменных. Т.е., ты выбрал папку, нажал на кнопку еще раз, но вместо
        выбора нажал "отмену" и путь превратился в слэш, дальше нужно выбрать путь заново.
        Чтобы это предотвратить, решил ввести дополнительные переменные pre_path_s, которые
        сохраняют то, что возвращает askfordirectory, и передают значение в глобальную
@@ -239,14 +247,14 @@ def jumptodest():
 
 
 def about():
-    if is_opened.get() == 0: #если окно пока не создано - создать
-        global info #если оставить локальной, блок else не отработает корректно
+    if is_opened.get() == 0:  # если окно пока не создано - создать
+        global info  # если оставить локальной, блок else не отработает корректно
         info = Toplevel()
         info.geometry("600x350+480+50")
         info.resizable(False, False)
         info.title("О программе")
         info.config(bg="#BDBDBD")
-        info.protocol("WM_DELETE_WINDOW", destroy_info) #если окно будет закрываться с windows - перейти на destroy_info
+        info.protocol("WM_DELETE_WINDOW", destroy_info)  # если окно будет закрываться с windows - перейти на destroy_info
         content=Label(info, text="Программа Reference Sorting Tool (ReSort™)\nпредназначена \
 для автоматизации поиска и каталогизации документов ДПК.\nПрограмма осуществляет поиск ДПК в формате .docx \
 на греческом, английском и русском языках в заданной пользователем директории\nи автоматически \
@@ -257,13 +265,13 @@ def about():
 В случае повторения имени файла в целевой папке, к нему будет добавлен нумератор повторений.\n\n \
 Разработчик: Денис Лозинский\n2018", font=("Times New Roman", 12), bg="#E6E0F8", relief=SUNKEN, wraplength=560)
         content.pack(fill=BOTH, expand=True)
-        is_opened.set(1) #помечаем окно созданным
+        is_opened.set(1)  # помечаем окно созданным
     else:
-        destroy_info() #если окно уже создано - закрыть
+        destroy_info()  # если окно уже создано - закрыть
 
     
 def destroy_info():
-    #закрывает окно "о программе" и обнуляет маркер is_opened
+    # закрывает окно "о программе" и обнуляет маркер is_opened
     info.destroy()
     is_opened.set(0)
     
@@ -271,7 +279,7 @@ def destroy_info():
 def all_clear():
     display1.delete(0, END)
     display2.delete(0, END)
-    progress["value"] = 0 #обнуление и очистка прогрессбара
+    progress["value"] = 0  # обнуление и очистка прогрессбара
     status_source.config(text="")
     status_dest.config(text="")
     percentage.config(text="")
@@ -283,21 +291,21 @@ def all_clear():
 
 
 def BothScroll(*args):
-    #обеспечивает одновременный скроллинг листбоксов одним скроллером
+    # обеспечивает одновременный скроллинг листбоксов одним скроллером
     display1.yview(*args)
     display2.yview(*args)
 
 def WithMouseWheel(event):
-    #обеспечивает одновременный скроллинг листбоксов колесиком мыши
+    # обеспечивает одновременный скроллинг листбоксов колесиком мыши
     display1.yview("scroll", int(-1*(event.delta/120)),"units")
     display2.yview("scroll", int(-1*(event.delta/120)),"units")
-    #this prevents default bindings from firing, which
-    #would end up scrolling the widget twice
+    # this prevents default bindings from firing, which
+    # would end up scrolling the widget twice
     return "break"       
 
 window = Tk()
-general_bg = "#1D2129" #цвет общего фона
-displays_bg = "#F5F6CE" #цвет фона дисплеев
+general_bg = "#1D2129"  # цвет общего фона
+displays_bg = "#F5F6CE"  # цвет фона дисплеев
 window.title("ReSort build 2.3.9 beta")
 window.geometry("1366x768")
 window.configure(bg=general_bg)
@@ -342,10 +350,10 @@ copy_but.place(x=50, y=275)
 button_start = Button(window, text="Начать", padx="20", pady="20", relief=RIDGE, command=ReSort)
 button_start.place(x=95, y=325)
 
-button_jumptosource = Button(window,text="Перейти", padx="50", pady="10", relief=RIDGE, command=jumptosource)
+button_jumptosource = Button(window, text="Перейти", padx="50", pady="10", relief=RIDGE, command=jumptosource)
 button_jumptosource.place(x=445, y=605)
 
-button_jumptodest = Button(window,text="Перейти", padx="50", pady="10", relief=RIDGE, command=jumptodest)
+button_jumptodest = Button(window, text="Перейти", padx="50", pady="10", relief=RIDGE, command=jumptodest)
 button_jumptodest.place(x=970, y=605)
 
 status = Label(window, text=">>>>> Добро пожаловать в ReSort! Где будем искать файлы?", font=("Times New Roman", 12), \
@@ -358,13 +366,14 @@ status_source.place(x=300, y=68)
 status_dest = Label(window, font=("Times New Roman", 10, "italic"), bg=general_bg, fg="white", width=63)
 status_dest.place(x=825, y=68)
 
-is_opened = IntVar() #переменная-маркер, указывающая на статус окна "О программе"
-is_opened.set(0) # 0 - не создано, 1 - создано
+is_opened = IntVar()  # переменная-маркер, указывающая на статус окна "О программе"
+is_opened.set(0)  # 0 - не создано, 1 - создано
 info_button = Button(window, text="Info", font=("Brush Script MT", 24), fg="white", width=4, height=1, bg=general_bg, \
                      activeforeground="#E6E0F8", activebackground=general_bg, relief=FLAT, command=about)
 info_button.pack(side=TOP, anchor=E, padx=5, pady=5)
 
-clear_button = Button(window, text="Cброс", font=("Times New Roman", 8, "italic"), bg="#ECCEF5", padx="10", pady="1", relief=RIDGE, command=all_clear)
+clear_button = Button(window, text="Cброс", font=("Times New Roman", 8, "italic"), bg="#ECCEF5", padx="10", pady="1", \
+                      relief=RIDGE, command=all_clear)
 clear_button.place(x=758, y=603)
 
 progress = ttk.Progressbar(window, orient="horizontal", mode="determinate")
