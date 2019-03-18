@@ -306,7 +306,7 @@ def WithMouseWheel(event):
 window = Tk()
 general_bg = "#1D2129"  # цвет общего фона
 displays_bg = "#F5F6CE"  # цвет фона дисплеев
-window.title("ReSort build 2.3.9 beta")
+window.title("ReSort build 2.3.9")
 window.geometry("1366x768")
 window.configure(bg=general_bg)
 window.iconbitmap("ReSort.ico")
